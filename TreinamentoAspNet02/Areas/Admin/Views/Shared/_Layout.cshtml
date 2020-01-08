@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Área do Administrador - HELPCHAT</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/Admin.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="viewport">
+        <!-- Sidebar -->
+        <div id="sidebar">
+            <header>
+                <a href="/Admin">
+                    <i class="glyphicon glyphicon-headphones"></i>
+                    HELPCHAT - Admin
+                </a>
+            </header>
+            <ul class="nav">
+                <li>
+                    @Html.ActionLink(" Consultores", "Index", "Consultores", new { area = "Admin" }, new { @class = "glyphicon glyphicon-user", @style = "font-size: 18px;" })
+                </li>
+                <li>
+                    @Html.ActionLink(" Atendimentos", "Index", "Atendimentos", new { area = "Admin" }, new { @class = "glyphicon glyphicon-earphone", @style = "font-size: 18px;" })
+                </li>
+            </ul>
+        </div>
+        <!-- Content -->
+        <div id="content">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid" style="padding-right: 30px;">
+                    @Html.Partial("_LoginPartial")
+                </div>
+            </nav>
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
