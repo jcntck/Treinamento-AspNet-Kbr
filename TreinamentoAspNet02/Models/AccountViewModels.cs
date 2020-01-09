@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 
 namespace TreinamentoAspNet02.Models
 {
@@ -88,6 +89,11 @@ namespace TreinamentoAspNet02.Models
         [DataType(DataType.Text)]
         [Display(Name = "Descrição")]
         public string Descricao { get; set; }
+
+        [DataType(DataType.Upload)]
+        [Display(Name = "Foto de Perfil")]
+        public HttpPostedFileBase FotoPerfil { get; set; }
+
     }
 
     public class ResetPasswordViewModel
@@ -118,4 +124,5 @@ namespace TreinamentoAspNet02.Models
         [Display(Name = "E-mail")]
         public string Email { get; set; }
     }
+
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -76,9 +77,14 @@ namespace TreinamentoAspNet02.Controllers
             // Isso não conta falhas de login em relação ao bloqueio de conta
             // Para permitir que falhas de senha acionem o bloqueio da conta, altere para shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var user = await UserManager.FindAsync(model.Email, model.Password);
             switch (result)
             {
+                
                 case SignInStatus.Success:
+                    if (UserManager.IsInRole(user.Id, "Admin"))
+                        return RedirectToLocal("/Admin");
+
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -137,6 +143,7 @@ namespace TreinamentoAspNet02.Controllers
         //
         // GET: /Account/Register
         [Authorize(Roles = "Admin")]
+        //[AllowAnonymous]
         public ActionResult Register()
         {
             return View();
@@ -146,30 +153,42 @@ namespace TreinamentoAspNet02.Controllers
         // POST: /Account/Register
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        //[AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
+
+                var file = model.FotoPerfil;
+                string foto = null;
+                if (file != null)
+                {
+                    foto = Guid.NewGuid().ToString() + System.IO.Path.GetFileName(file.FileName);
+                    string path = System.IO.Path.Combine(Server.MapPath("~/Images/Perfil"), foto);
+                    file.SaveAs(path);
+                }
+
                 var user = new ApplicationUser
                 {
                     UserName = model.Email,
                     Email = model.Email,
                     Nome = model.Nome,
-                    Descricao = model.Descricao
+                    Descricao = model.Descricao,
+                    FotoPerfil = foto
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                     // Para obter mais informações sobre como habilitar a confirmação da conta e redefinição de senha, visite https://go.microsoft.com/fwlink/?LinkID=320771
                     // Enviar um email com este link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirmar sua conta", "Confirme sua conta clicando <a href=\"" + callbackUrl + "\">aqui</a>");
+                    await UserManager.SendEmailAsync(user.Id, "Conta criada", "Sua conta no Helpchat foi criada com sucesso.\nEste são seus dados:\nE-mail: " + user.Email + "\nSenha: " + model.Password);
                     UserManager.AddToRole(user.Id, "Consultor");
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Consultores", new { area = "Admin" } );
                 }
                 AddErrors(result);
             }
@@ -409,6 +428,27 @@ namespace TreinamentoAspNet02.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
+        public ActionResult DeleteUser(string id)
+        {
+            var user = UserManager.FindById(id);
+
+            // Excluir img se houver
+            FileInfo fotoPerfil = new FileInfo(Server.MapPath("~/Images/Perfil/") + user.FotoPerfil);
+            if (fotoPerfil.Exists)
+            {
+                fotoPerfil.Delete();
+            }
+            UserManager.SendEmail(user.Id, "Conta excluida", "Sua conta no Helpchat foi deletada.\nData/hora:" + String.Format("{0: dd/MM/yyyy - HH:mm:ss}", DateTime.Now));
+            var result = UserManager.Delete(user);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", "Consultores", new { area = "Admin" });
+            }
+            AddErrors(result);
+            return RedirectToAction("Index", "Consultores", new { area = "Admin" });
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -486,6 +526,7 @@ namespace TreinamentoAspNet02.Controllers
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }
+
         #endregion
     }
 }

@@ -1,18 +1,39 @@
-﻿
+﻿@model IEnumerable<TreinamentoAspNet02.Areas.Admin.Models.IndexViewModel>
 @{
     ViewBag.Title = "Index";
 }
 
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading" style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>Lista de consultores</h2>
+            @Html.ActionLink("Novo Consultor", "Register", "Account", new { area = "" }, new { @class = "btn btn-default", @role = "button" })
+        </div>
 
-
-<div class="panel panel-default">
-    <!-- Default panel contents -->
-    <div class="panel-heading" style="display: flex; justify-content: space-between; align-items: center;">
-        <h2>Lista de consultores</h2>
-        @Html.ActionLink("Novo Consultor", "Register", "Account", new { area = "" }, new { @class = "btn btn-default", @role = "button" })
+        <!-- Table -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>Foto de Perfil</td>
+                    <td>Nome</td>
+                    <td>E-mail</td>
+                </tr>
+            </thead>
+            @foreach (var consultor in Model)
+            {
+                <tr>
+                    @if (!consultor.FotoPerfil.IsEmpty())
+                    {
+                        <td>@consultor.FotoPerfil</td>
+                    }
+                    else
+                    {
+                        <td>Sem foto</td>
+                    }
+                    <td>@consultor.Nome</td>
+                    <td>@consultor.Email</td>
+                    <td>@Html.ActionLink("Excluir", "DeleteUser", "Account", new { area = "", id = consultor.Id }, new { })</td>
+                </tr>
+            }
+        </table>
     </div>
-
-    <!-- Table -->
-    <table class="table">
-    </table>
-</div>
