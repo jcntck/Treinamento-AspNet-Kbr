@@ -32,6 +32,7 @@
                     }
                     <td>@consultor.Nome</td>
                     <td>@consultor.Email</td>
+                    <td>@Html.ActionLink("Editar", "Edit", "Account", new { area = "", id = consultor.Id }, new { })</td>
                     <td>@Html.ActionLink("Excluir", "DeleteUser", "Account", new { area = "", id = consultor.Id }, new { })</td>
                 </tr>
             }

@@ -80,7 +80,7 @@ namespace TreinamentoAspNet02.Controllers
             var user = await UserManager.FindAsync(model.Email, model.Password);
             switch (result)
             {
-                
+
                 case SignInStatus.Success:
                     if (UserManager.IsInRole(user.Id, "Admin"))
                         return RedirectToLocal("/Admin");
@@ -164,7 +164,7 @@ namespace TreinamentoAspNet02.Controllers
                 string foto = null;
                 if (file != null)
                 {
-                    foto = Guid.NewGuid().ToString() + System.IO.Path.GetFileName(file.FileName);
+                    foto = Guid.NewGuid().ToString() + System.IO.Path.GetFileName(file.FileName).Replace(" ", "-");
                     string path = System.IO.Path.Combine(Server.MapPath("~/Images/Perfil"), foto);
                     file.SaveAs(path);
                 }
@@ -188,7 +188,7 @@ namespace TreinamentoAspNet02.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     await UserManager.SendEmailAsync(user.Id, "Conta criada", "Sua conta no Helpchat foi criada com sucesso.\nEste são seus dados:\nE-mail: " + user.Email + "\nSenha: " + model.Password);
                     UserManager.AddToRole(user.Id, "Consultor");
-                    return RedirectToAction("Index", "Consultores", new { area = "Admin" } );
+                    return RedirectToAction("Index", "Consultores", new { area = "Admin" });
                 }
                 AddErrors(result);
             }
@@ -426,6 +426,82 @@ namespace TreinamentoAspNet02.Controllers
         public ActionResult ExternalLoginFailure()
         {
             return View();
+        }
+
+        //GET: /Account/Edit
+        [Authorize(Roles = "Admin")]
+        public ActionResult Edit(string id)
+        {
+            if (!string.IsNullOrEmpty(id))
+            {
+                var user = UserManager.FindById(id);
+
+                var model = new EditViewModel
+                {
+                    Id = user.Id,
+                    Nome = user.Nome,
+                    Email = user.Email,
+                    Descricao = user.Descricao,
+                    FotoAntiga = user.FotoPerfil
+                };
+
+                return View(model);
+            }
+            return RedirectToAction("Index", "Consultores", new { area = "Admin" });
+        }
+
+        // POST: /Account/Edit
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        //[AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(EditViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = UserManager.FindById(model.Id);
+                var file = model.FotoPerfil;
+                string foto = null;
+                if (file != null)
+                {
+                    // Excluir img se houver
+                    FileInfo fotoPerfil = new FileInfo(Server.MapPath("~/Images/Perfil/") + model.FotoPerfil);
+                    if (fotoPerfil.Exists)
+                    {
+                        fotoPerfil.Delete();
+                    }
+
+                    foto = Guid.NewGuid().ToString() + System.IO.Path.GetFileName(file.FileName).Replace(" ", "-");
+                    string path = System.IO.Path.Combine(Server.MapPath("~/Images/Perfil"), foto);
+                    file.SaveAs(path);
+                }
+                else
+                {
+                    foto = model.FotoAntiga;
+                }
+
+                ApplicationUser userEdit = user;
+                if (!user.Email.Equals(model.Email))
+                {
+                    userEdit.UserName = model.Email;
+                    userEdit.Email = model.Email;
+                }
+                userEdit.Nome = model.Nome;
+                userEdit.Descricao = model.Descricao;
+                userEdit.FotoPerfil = foto;
+
+                var result = await UserManager.UpdateAsync(userEdit);
+                if (result.Succeeded)
+                {
+                    //await UserManager.SendEmailAsync(user.Id, "Conta criada", "Sua conta no Helpchat foi criada com sucesso.\nEste são seus dados:\nE-mail: " + user.Email + "\nSenha: " + model.Password);
+                    //UserManager.AddToRole(user.Id, "Consultor");
+                    return RedirectToAction("Index", "Consultores", new { area = "Admin" });
+                }
+                AddErrors(result);
+            }
+
+            // Se chegamos até aqui e houver alguma falha, exiba novamente o formulário
+            return View(model);
         }
 
         [Authorize(Roles = "Admin")]
