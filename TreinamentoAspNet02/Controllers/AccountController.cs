@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using TreinamentoAspNet02.Models;
+using TreinamentoAspNet02.Helpers;
 
 namespace TreinamentoAspNet02.Controllers
 {
@@ -159,15 +160,7 @@ namespace TreinamentoAspNet02.Controllers
         {
             if (ModelState.IsValid)
             {
-
-                var file = model.FotoPerfil;
-                string foto = null;
-                if (file != null)
-                {
-                    foto = Guid.NewGuid().ToString() + System.IO.Path.GetFileName(file.FileName).Replace(" ", "-");
-                    string path = System.IO.Path.Combine(Server.MapPath("~/Images/Perfil"), foto);
-                    file.SaveAs(path);
-                }
+                string foto = Image.Save(model.FotoPerfil);
 
                 var user = new ApplicationUser
                 {
@@ -460,25 +453,7 @@ namespace TreinamentoAspNet02.Controllers
             if (ModelState.IsValid)
             {
                 var user = UserManager.FindById(model.Id);
-                var file = model.FotoPerfil;
-                string foto = null;
-                if (file != null)
-                {
-                    // Excluir img se houver
-                    FileInfo fotoPerfil = new FileInfo(Server.MapPath("~/Images/Perfil/") + model.FotoPerfil);
-                    if (fotoPerfil.Exists)
-                    {
-                        fotoPerfil.Delete();
-                    }
-
-                    foto = Guid.NewGuid().ToString() + System.IO.Path.GetFileName(file.FileName).Replace(" ", "-");
-                    string path = System.IO.Path.Combine(Server.MapPath("~/Images/Perfil"), foto);
-                    file.SaveAs(path);
-                }
-                else
-                {
-                    foto = model.FotoAntiga;
-                }
+                string foto = Image.Update(model.FotoAntiga, model.FotoPerfil);
 
                 ApplicationUser userEdit = user;
                 if (!user.Email.Equals(model.Email))
@@ -494,7 +469,6 @@ namespace TreinamentoAspNet02.Controllers
                 if (result.Succeeded)
                 {
                     //await UserManager.SendEmailAsync(user.Id, "Conta criada", "Sua conta no Helpchat foi criada com sucesso.\nEste são seus dados:\nE-mail: " + user.Email + "\nSenha: " + model.Password);
-                    //UserManager.AddToRole(user.Id, "Consultor");
                     return RedirectToAction("Index", "Consultores", new { area = "Admin" });
                 }
                 AddErrors(result);
@@ -509,14 +483,11 @@ namespace TreinamentoAspNet02.Controllers
         {
             var user = UserManager.FindById(id);
 
-            // Excluir img se houver
-            FileInfo fotoPerfil = new FileInfo(Server.MapPath("~/Images/Perfil/") + user.FotoPerfil);
-            if (fotoPerfil.Exists)
-            {
-                fotoPerfil.Delete();
-            }
             UserManager.SendEmail(user.Id, "Conta excluida", "Sua conta no Helpchat foi deletada.\nData/hora:" + String.Format("{0: dd/MM/yyyy - HH:mm:ss}", DateTime.Now));
+            
+            Image.Delete(user.FotoPerfil);
             var result = UserManager.Delete(user);
+
             if (result.Succeeded)
             {
                 return RedirectToAction("Index", "Consultores", new { area = "Admin" });

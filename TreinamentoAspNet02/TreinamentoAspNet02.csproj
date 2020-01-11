@@ -215,6 +215,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\Image.cs" />
     <Compile Include="Migrations\202001101548289_Consultor.cs" />
     <Compile Include="Migrations\202001101548289_Consultor.Designer.cs">
       <DependentUpon>202001101548289_Consultor.cs</DependentUpon>
@@ -315,6 +316,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Consultor\Models\" />
     <Folder Include="Images\Perfil\" />
+    <Folder Include="Views\Resizer\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

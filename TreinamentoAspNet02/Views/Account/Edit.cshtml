@@ -35,12 +35,26 @@
             @Html.LabelFor(m => m.Descricao, new { @class = "control-label" })
             @Html.TextAreaFor(m => m.Descricao, new { @class = "form-control" })
         </div>
-        <div class="form-group">
-            @Html.TextBoxFor(m => m.FotoAntiga, new { @type = "hidden" })
-            @Html.LabelFor(m => m.FotoPerfil, new { @class = "control-label" });
-            @Html.TextBoxFor(m => m.FotoPerfil, new { @class = "form-control", type = "file" })
+        <div class="row">
+            <div class="col-md-2">
+                @if (!string.IsNullOrEmpty(Model.FotoAntiga))
+                {
+                    <img src="~/Images/Perfil/@Model.FotoAntiga" class="img-responsive" alt="Foto de perfil" title="Foto de perfil" />
+                }
+                else
+                {
+                    <img src="~/Images/Perfil/semfoto.jpg" class="img-responsive" alt="Sem foto" title="Sem foto" />
+                }
+            </div>
+            <div class="form-group col-md-10">
+                @Html.LabelFor(m => m.FotoPerfil, new { @class = "control-label" });
+                @Html.TextBoxFor(m => m.FotoAntiga, new { @type = "hidden" })
+                @Html.TextBoxFor(m => m.FotoPerfil, new { @class = "form-control", type = "file" })
+                <small class="text-warning">Não selecione nenhuma imagem nova se quiser manter a foto de perfil atual.</small>
+            </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" style="margin-top: 10px;">
+            @Html.ActionLink("Redefinir senha", "ChangePassword", "Manage", new { }, new { @class = "btn btn-default" })
             <input type="submit" class="btn btn-default" value="Atualizar" />
         </div>
     }
@@ -48,5 +62,5 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-}>
+}
 

@@ -224,7 +224,7 @@ namespace TreinamentoAspNet02.Controllers
         // POST: /Manage/ChangePassword
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
+        public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model, string id)
         {
             if (!ModelState.IsValid)
             {
@@ -239,6 +239,7 @@ namespace TreinamentoAspNet02.Controllers
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
                 return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+                //return RedirectToAction()
             }
             AddErrors(result);
             return View(model);

@@ -231,7 +231,6 @@ C:\Users\João\Desktop\KBRTec\treinamento_aspNet02\TreinamentoAspNet02\obj\Debug
 C:\Users\João\Desktop\KBRTec\treinamento_aspNet02\TreinamentoAspNet02\obj\Debug\TreinamentoAspNet02.pdb
 C:\Users\João\Desktop\KBRTec\treinamento_aspNet02\TreinamentoAspNet02\obj\Debug\TreinamentoAspNet02.Migrations.Consultor.resources
 C:\Users\João\Desktop\KBRTec\treinamento_aspNet02\TreinamentoAspNet02\obj\Debug\TreinamentoAspNet02.csproj.GenerateResource.cache
-C:\Users\João\Desktop\KBRTec\treinamento_aspNet02\TreinamentoAspNet02\obj\Debug\TreinamentoAspNet02.Migrations.Consultor11.resources
 C:\Users\KBRTEC - 03\Desktop\TreinamentoAspNet02\TreinamentoAspNet02\bin\TreinamentoAspNet02.dll.config
 C:\Users\KBRTEC - 03\Desktop\TreinamentoAspNet02\TreinamentoAspNet02\bin\TreinamentoAspNet02.dll
 C:\Users\KBRTEC - 03\Desktop\TreinamentoAspNet02\TreinamentoAspNet02\bin\TreinamentoAspNet02.pdb
