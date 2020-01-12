@@ -41,6 +41,8 @@ namespace TreinamentoAspNet02.Models
 
     public class ChangePasswordViewModel
     {
+        public string Id { get; set; }
+
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Senha atual")]

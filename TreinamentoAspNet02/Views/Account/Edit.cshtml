@@ -54,7 +54,7 @@
             </div>
         </div>
         <div class="form-group" style="margin-top: 10px;">
-            @Html.ActionLink("Redefinir senha", "ChangePassword", "Manage", new { }, new { @class = "btn btn-default" })
+            @Html.ActionLink("Redefinir senha", "ChangePassword", "Manage", new { id = Model.Id }, new { @class = "btn btn-default" })
             <input type="submit" class="btn btn-default" value="Atualizar" />
         </div>
     }
