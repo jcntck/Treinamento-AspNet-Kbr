@@ -233,6 +233,8 @@ namespace TreinamentoAspNet02.Controllers
             var result = await UserManager.ChangePasswordAsync(model.Id, model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
+                var user = UserManager.FindById(model.Id);
+                await UserManager.SendEmailAsync(user.Id, "Senha alterada", "Sua senha no Helpchat foram atualizados.\nDados de acesso:\nE-mail:" + user.Email + "\nNova Senha: " + model.NewPassword);
                 // return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
                 return RedirectToAction("Edit", "Account", new { id = model.Id });
             }

@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using TreinamentoAspNet02.Models;
 using TreinamentoAspNet02.Areas.Admin.Models;
+using System.Reflection;
 
 namespace TreinamentoAspNet02.Areas.Admin.Controllers
 {
@@ -15,6 +16,7 @@ namespace TreinamentoAspNet02.Areas.Admin.Controllers
         // GET: Admin/Consultores
         public ActionResult Index()
         {
+            ViewBag.StatusMessage = TempData["success"];
             Context = new ApplicationDbContext();
             var users = (from user in Context.Users
                          select new

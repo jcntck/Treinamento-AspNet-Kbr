@@ -11,6 +11,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using TreinamentoAspNet02.Models;
 using TreinamentoAspNet02.Helpers;
+using TreinamentoAspNet02.Entity;
+using static TreinamentoAspNet02.Areas.Admin.Controllers.ConsultoresController;
 
 namespace TreinamentoAspNet02.Controllers
 {
@@ -19,6 +21,7 @@ namespace TreinamentoAspNet02.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private sistema_atendimentoEntities db = new sistema_atendimentoEntities();
 
         public AccountController()
         {
@@ -181,7 +184,8 @@ namespace TreinamentoAspNet02.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     await UserManager.SendEmailAsync(user.Id, "Conta criada", "Sua conta no Helpchat foi criada com sucesso.\nEste são seus dados:\nE-mail: " + user.Email + "\nSenha: " + model.Password);
                     UserManager.AddToRole(user.Id, "Consultor");
-                    return RedirectToAction("Index", "Consultores", new { area = "Admin" });
+                    TempData["success"] = "Consultor criado com sucesso.";
+                    return RedirectToAction("Index", "Consultores", new { area = "Admin"});
                 }
                 AddErrors(result);
             }
@@ -455,20 +459,19 @@ namespace TreinamentoAspNet02.Controllers
                 var user = UserManager.FindById(model.Id);
                 string foto = Image.Update(model.FotoAntiga, model.FotoPerfil);
 
-                ApplicationUser userEdit = user;
                 if (!user.Email.Equals(model.Email))
                 {
-                    userEdit.UserName = model.Email;
-                    userEdit.Email = model.Email;
+                    user.UserName = model.Email;
+                    user.Email = model.Email;
                 }
-                userEdit.Nome = model.Nome;
-                userEdit.Descricao = model.Descricao;
-                userEdit.FotoPerfil = foto;
+                user.Nome = model.Nome;
+                user.Descricao = model.Descricao;
+                user.FotoPerfil = foto;
 
-                var result = await UserManager.UpdateAsync(userEdit);
+                var result = await UserManager.UpdateAsync(user);
                 if (result.Succeeded)
                 {
-                    //await UserManager.SendEmailAsync(user.Id, "Conta criada", "Sua conta no Helpchat foi criada com sucesso.\nEste são seus dados:\nE-mail: " + user.Email + "\nSenha: " + model.Password);
+                    await UserManager.SendEmailAsync(user.Id, "Conta atualizada", "Os dados da sua conta no Helpchat foram atualizados.\nDados atuais:\nNome: "+ user.Nome +"\nE-mail: "+ user.Email +"\nDescricão: "+ user.Descricao);
                     return RedirectToAction("Index", "Consultores", new { area = "Admin" });
                 }
                 AddErrors(result);
@@ -496,6 +499,16 @@ namespace TreinamentoAspNet02.Controllers
             return RedirectToAction("Index", "Consultores", new { area = "Admin" });
         }
 
+        [Authorize(Roles = "Admin")]
+        public ActionResult Details(string id)
+        {
+            if (!string.IsNullOrEmpty(id))
+            {
+                var user = db.AspNetUsers.Find(id);
+                return View(user);
+            }
+            return RedirectToAction("Index", "Consultores", new { area = "Admin" });
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

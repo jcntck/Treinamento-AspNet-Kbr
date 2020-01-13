@@ -1,0 +1,30 @@
+﻿@model TreinamentoAspNet02.Entity.AspNetUsers 
+@{
+    ViewBag.Title = "Detalhes da conta";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-4">
+                @if (!Model.FotoPerfil.IsEmpty())
+                {
+                    <img src="~/Images/Perfil/@Model.FotoPerfil" alt="Foto de perfil" class="img-responsive img-thumbnail" />
+                }
+                else
+                {
+                    <img src="~/Images/Perfil/semfoto.jpg" alt="Foto de perfil" class="img-responsive img-thumbnail" />
+                }
+            </div>
+            <div class="col-md-8">
+                <h2>@Model.Nome</h2>
+                <p>E-mail: @Model.Email</p>
+                <p>Descrição: @Model.Descricao</p>
+            </div>
+        </div>
+    </div>
+</div>
+

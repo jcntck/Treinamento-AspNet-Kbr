@@ -67,3 +67,18 @@ body {
             #sidebar .nav a i {
                 margin-right: 16px;
             }
+
+/** ESTILO PESSOAL */
+.thumb-tabela {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.thumb-tabela img {
+    position: absolute;
+    left: -50%;
+    width: 120px;
+}

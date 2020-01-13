@@ -3,38 +3,65 @@
     ViewBag.Title = "Index";
 }
 
-    <div class="panel panel-default">
-        <!-- Default panel contents -->
-        <div class="panel-heading" style="display: flex; justify-content: space-between; align-items: center;">
-            <h2>Lista de consultores</h2>
-            @Html.ActionLink("Novo Consultor", "Register", "Account", new { area = "" }, new { @class = "btn btn-default", @role = "button" })
-        </div>
+@if (!string.IsNullOrEmpty(ViewBag.StatusMessage)) { 
+<div class="alert alert-success" role="alert">
+    <p class="text-success">@ViewBag.StatusMessage</p>
+</div>
+}
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading" style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>Lista de consultores</h2>
+        @Html.ActionLink("Novo Consultor", "Register", "Account", new { area = "" }, new { @class = "btn btn-default", @role = "button" })
+    </div>
 
+    <div style="padding: 10px;">
         <!-- Table -->
-        <table class="table">
+        <table id="consultores" class="table">
             <thead>
                 <tr>
-                    <td>Foto de Perfil</td>
+                    <td>Imagem</td>
                     <td>Nome</td>
                     <td>E-mail</td>
+                    <td><i class="glyphicon glyphicon-search" title="Mais detalhes"></i></td>
+                    <td><i class="glyphicon glyphicon-pencil" title="Editar"></i></td>
+                    <td><i class="glyphicon glyphicon-trash" title="Remover"></i></td>
                 </tr>
             </thead>
             @foreach (var consultor in Model)
             {
                 <tr>
-                    @if (!consultor.FotoPerfil.IsEmpty())
-                    {
-                        <td>@consultor.FotoPerfil</td>
-                    }
-                    else
-                    {
-                        <td>Sem foto</td>
-                    }
+                    <td style="width: 100px; margin: auto;">
+                        <div class="thumb-tabela">
+                            @if (!consultor.FotoPerfil.IsEmpty())
+                            {
+                                <img src="~/Images/Perfil/@consultor.FotoPerfil" alt="Foto de perfil" />
+                            }
+                            else
+                            {
+                                <img src="~/Images/Perfil/semfoto.jpg" alt="Foto de perfil" />
+                            }
+                        </div>
+                    </td>
                     <td>@consultor.Nome</td>
                     <td>@consultor.Email</td>
-                    <td>@Html.ActionLink("Editar", "Edit", "Account", new { area = "", id = consultor.Id }, new { })</td>
-                    <td>@Html.ActionLink("Excluir", "DeleteUser", "Account", new { area = "", id = consultor.Id }, new { })</td>
+                    <td style="width: 60px;">
+                        <a href="@Url.Action("Details","Account", new { area = "", id = consultor.Id })" title="Mais detalhes">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </a>
+                    </td>
+                    <td style="width: 60px;">
+                        <a href="@Url.Action("Edit","Account", new { area = "", id = consultor.Id })" title="Editar">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                        </a>
+                    </td>
+                    <td style="width: 60px;">
+                        <a href="@Url.Action("DeleteUser","Account", new { area = "", id = consultor.Id })" title="Excluir">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                    </td>
                 </tr>
             }
         </table>
     </div>
+</div>
