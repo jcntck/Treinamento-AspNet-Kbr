@@ -1,0 +1,50 @@
+﻿@model TreinamentoAspNet02.Models.RegisterViewModel
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Novo Consultor";
+}
+
+<div class="container">
+    <h2>@ViewBag.Title.</h2>
+
+    @using (Html.BeginForm("Register", "Consultores", FormMethod.Post, new { role = "form", enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <h4>Cadastre um novo consultor</h4>
+        <hr />
+        <div class="row">
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Nome, new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.Nome, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Email, new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Password, new { @class = "control-label" })
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "control-label" })
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Descricao, new { @class = "control-label" })
+            @Html.TextAreaFor(m => m.Descricao, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.FotoPerfil, new { @class = "control-label" });
+            @Html.TextBoxFor(m => m.FotoPerfil, new { @class = "form-control" , type = "file" })
+        </div>
+        <div class="form-group">
+            <input type="submit" class="btn btn-default" value="Cadastrar" />
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

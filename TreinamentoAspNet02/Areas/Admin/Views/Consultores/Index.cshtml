@@ -12,7 +12,7 @@
     <!-- Default panel contents -->
     <div class="panel-heading" style="display: flex; justify-content: space-between; align-items: center;">
         <h2>Lista de consultores</h2>
-        @Html.ActionLink("Novo Consultor", "Register", "Account", new { area = "" }, new { @class = "btn btn-default", @role = "button" })
+        @Html.ActionLink("Novo Consultor", "Register", "Consultores", new { area = "Admin" }, new { @class = "btn btn-default", @role = "button" })
     </div>
 
     <div style="padding: 10px;">
@@ -46,17 +46,17 @@
                     <td>@consultor.Nome</td>
                     <td>@consultor.Email</td>
                     <td style="width: 60px;">
-                        <a href="@Url.Action("Details","Account", new { area = "", id = consultor.Id })" title="Mais detalhes">
+                        <a href="@Url.Action("Details","Consultores", new { id = consultor.Id })" title="Mais detalhes">
                             <i class="glyphicon glyphicon-search"></i>
                         </a>
                     </td>
                     <td style="width: 60px;">
-                        <a href="@Url.Action("Edit","Account", new { area = "", id = consultor.Id })" title="Editar">
+                        <a href="@Url.Action("Edit","Consultores", new { id = consultor.Id })" title="Editar">
                             <i class="glyphicon glyphicon-pencil"></i>
                         </a>
                     </td>
                     <td style="width: 60px;">
-                        <a href="@Url.Action("DeleteUser","Account", new { area = "", id = consultor.Id })" title="Excluir">
+                        <a href="@Url.Action("DeleteUser","Consultores", new { id = consultor.Id })" title="Excluir">
                             <i class="glyphicon glyphicon-trash"></i>
                         </a>
                     </td>

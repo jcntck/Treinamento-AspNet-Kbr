@@ -96,33 +96,6 @@ namespace TreinamentoAspNet02.Models
 
     }
 
-    public class EditViewModel
-    {
-        public string Id { get; set; }
-
-        [Required]
-        [Display(Name = "Nome do consultor")]
-        public string Nome { get; set; }
-
-        [Required]
-        [EmailAddress]
-        [Display(Name = "Email")]
-        public string Email { get; set; }
-
-        [Required]
-        [DataType(DataType.Text)]
-        [Display(Name = "Descrição")]
-        public string Descricao { get; set; }
-
-
-        public string FotoAntiga { get; set; }
-        [DataType(DataType.Upload)]
-        [Display(Name = "Foto de Perfil")]
-        public HttpPostedFileBase FotoPerfil { get; set; }
-
-
-    }
-
     public class ResetPasswordViewModel
     {
         [Required]
