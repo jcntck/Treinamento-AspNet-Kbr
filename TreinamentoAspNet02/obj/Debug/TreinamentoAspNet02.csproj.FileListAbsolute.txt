@@ -348,3 +348,9 @@ C:\Users\KBRTEC - 03\Desktop\TreinamentoAspNet02\TreinamentoAspNet02\obj\Debug\T
 C:\Users\KBRTEC - 03\Desktop\TreinamentoAspNet02\TreinamentoAspNet02\obj\Debug\TreinamentoAspNet02.Migrations.Consultor.resources
 C:\Users\KBRTEC - 03\Desktop\TreinamentoAspNet02\TreinamentoAspNet02\obj\Debug\TreinamentoAspNet02.csproj.GenerateResource.cache
 C:\Users\KBRTEC - 03\Desktop\TreinamentoAspNet02\TreinamentoAspNet02\obj\Debug\TreinamentoAspNet02.Migrations.Consultor10.resources
+C:\Users\KBRTEC - 03\Desktop\TreinamentoAspNet02\TreinamentoAspNet02\bin\Microsoft.AspNet.SignalR.Core.dll
+C:\Users\KBRTEC - 03\Desktop\TreinamentoAspNet02\TreinamentoAspNet02\bin\Microsoft.AspNet.SignalR.SystemWeb.dll
+C:\Users\KBRTEC - 03\Desktop\TreinamentoAspNet02\TreinamentoAspNet02\bin\Microsoft.AspNet.SignalR.Core.xml
+C:\Users\KBRTEC - 03\Desktop\TreinamentoAspNet02\TreinamentoAspNet02\bin\Microsoft.AspNet.SignalR.SystemWeb.xml
+C:\Users\KBRTEC - 03\Desktop\TreinamentoAspNet02\TreinamentoAspNet02\bin\pt-br\Microsoft.AspNet.SignalR.Core.resources.dll
+C:\Users\KBRTEC - 03\Desktop\TreinamentoAspNet02\TreinamentoAspNet02\bin\pt-br\Microsoft.AspNet.SignalR.SystemWeb.resources.dll

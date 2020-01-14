@@ -19,5 +19,10 @@ namespace TreinamentoAspNet02.Controllers
 
             return View();
         }
+
+        public ActionResult Chat()
+        {
+            return View();
+        }
     }
 }
