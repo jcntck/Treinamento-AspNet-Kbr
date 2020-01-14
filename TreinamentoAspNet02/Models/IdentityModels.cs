@@ -4,12 +4,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TreinamentoAspNet02.Models
 {
     // É possível adicionar dados do perfil do usuário adicionando mais propriedades na sua classe ApplicationUser, visite https://go.microsoft.com/fwlink/?LinkID=317594 para obter mais informações.
     public class ApplicationUser : IdentityUser
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int AutoId { get; set; }
         public string Nome { get; set; }
         public string Descricao { get; set; }
         public string FotoPerfil { get; set; }

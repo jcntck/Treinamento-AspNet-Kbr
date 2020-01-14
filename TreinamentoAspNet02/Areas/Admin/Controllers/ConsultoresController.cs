@@ -56,11 +56,12 @@ namespace TreinamentoAspNet02.Areas.Admin.Controllers
                              Email = user.Email,
                              Descricao = user.Descricao,
                              FotoPerfil = user.FotoPerfil,
+                             AutoId = user.AutoId,
                              RoleNames = (from userRole in user.Roles
                                           join role in Context.Roles on userRole.RoleId
                                           equals role.Id
                                           select role.Name).ToList()
-                         }).Where(x => x.RoleNames.Contains("Consultor")).ToList().Select(p => new Models.IndexViewModel()
+                         }).Where(x => x.RoleNames.Contains("Consultor")).OrderByDescending(s => s.AutoId).ToList().Select(p => new Models.IndexViewModel()
                          {
                              Id = p.Id,
                              Nome = p.Nome,

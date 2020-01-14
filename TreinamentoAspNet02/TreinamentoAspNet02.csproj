@@ -167,6 +167,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\IdentityExtensions.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
@@ -219,6 +220,10 @@
     <Compile Include="Migrations\202001101548289_Consultor.cs" />
     <Compile Include="Migrations\202001101548289_Consultor.Designer.cs">
       <DependentUpon>202001101548289_Consultor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001141725462_Consultor 1.0.cs" />
+    <Compile Include="Migrations\202001141725462_Consultor 1.0.Designer.cs">
+      <DependentUpon>202001141725462_Consultor 1.0.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -340,6 +345,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202001101548289_Consultor.resx">
       <DependentUpon>202001101548289_Consultor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001141725462_Consultor 1.0.resx">
+      <DependentUpon>202001141725462_Consultor 1.0.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
