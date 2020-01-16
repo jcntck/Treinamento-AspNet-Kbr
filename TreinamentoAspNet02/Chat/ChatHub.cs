@@ -10,11 +10,12 @@ namespace TreinamentoAspNet02.Chat
     public class ChatHub : Hub
     {
         // Tutorial da Microsoft
-        public void Send(string name, string message, string group)
+        public void Send(string name, string message, string connId)
         {
             // Call the addNewMessageToPage method to update clients.
-            message = DateTime.Now.ToString("HH:mm:ss") + " - " + message;
-            Clients.Group(group).addNewMessageToPage(name, message);
+            //message = DateTime.Now.ToString("HH:mm:ss") + " - " + message;
+            //Clients.Group(group).addNewMessageToPage(name, message);
+            Clients.Client(connId).addNewMessageToPage(name, message);
         }
 
         public void AdicionaGrupo(string grupo)

@@ -1,66 +1,64 @@
-﻿@{
+﻿@model TreinamentoAspNet02.Entity.AspNetUsers
+@{
     ViewBag.Title = "Chat";
 }
 
 <h2>Chat</h2>
 
-<div class="container">
-    <label>
-        grupo:
-        <select id="grupo">
-            <option value="todos">Todos</option>
-            <option value="adm">Administradores</option>
-            <option value="usuario">Usuarios</option>
-        </select>
-    </label>
-    <input type="text" id="message" />
-    <input type="button" id="sendmessage" value="Send" />
-    <input type="hidden" id="displayname" />
-    <ul id="discussion">
-    </ul>
+<link href="~/Content/sweetalert.css" rel="stylesheet" />
+
+<p>Você está falando com: <strong>@Model.Nome</strong></p>
+
+<label class="control-label">Id do consultor: </label> <br />
+<input type="text" id="consultorId" />
+<div class="form-group col-xl-12">
+    <label class="control-label">Seu nome: </label>
+    <input type="text" class="col-lg-12 text-primary" id="nomeVisitante" /> <br />
+    <label class="control-label">Sua Id de conexão: </label>
+    <input type="text" class="col-lg-12 text-primary" id="connId" /> <br />
+
+    <label class="control-label">Your Message</label><br />
+    <input type="text" id="message" class="col-lg-10 text-primary" />&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="button" class="btn btn-primary" id="sendmessage" value="Send" /><br /><br>
+
+    <div class="container chatArea">
+        <input type="hidden" id="displayname" />
+        <ul id="discussion"></ul>
+    </div>
 </div>
 
 @section scripts {
     <script src="~/Scripts/jquery.signalR-2.2.2.min.js"></script>
+    <script src="~/Content/sweetalert.min.js"></script>
     <script src="~/signalr/hubs"></script>
     <script>
         $(function () {
             // Reference the auto-gererated proxy for the hub
             var chat = $.connection.chatHub;
-            var grupoAtual = 'todos';
 
-            // Create a function that the hub can call back to display messages.
             chat.client.addNewMessageToPage = function (name, message) {
-                // Add the message to the page
-                $('#discussion').append('<li><strong>' + htmlEncode(name) + '</strong>: ' + htmlEncode(message) + '</li>');
+                // Add the message to the page.
+                $('#discussion').append('<li><strong>' + htmlEncode(name)
+                    + '</strong>: ' + htmlEncode(message) + '</li>');
             };
-            //chat.adicionarMensagem = function (message) {
-            //    $('#discussion').append('<li>' + message + '</li>');
-            //};
-
-            // Get the user name and store it to prepend to messages.
-            $('#displayname').val(prompt('Enter your name:', ''));
-
-            // Set initial focus to message input box.
             $('#message').focus();
-
-            $('#grupo').change(function () {
-                chat.server.removeGrupo(grupoAtual);
-                grupoAtual = $('#grupo').val();
-                chat.server.adicionaGrupo(grupoAtual);
+            $('#message').keypress(function (e) {
+                if (e.which == 13) {//Enter key pressed
+                    $('#sendmessage').trigger('click');//Trigger search button click event
+                }
             });
 
             // Start de connection.
             $.connection.hub.start().done(function () {
-                chat.server.adicionaGrupo(grupoAtual);
-
+                $('#connId').val($.connection.hub.id);
                 $('#sendmessage').click(function () {
-                    // Call the Send method on the hub.
-                    chat.server.send($('#displayname').val(), $('#message').val(), grupoAtual);
-
-                    // Clear text box and reset focus for next comment.
+                    var id = $('#consultorId').val();
+                    chat.server.send($('#nomeVisitante').val(), $('#message').val(), id);
+                    console.log(id);
+                    $('#discussion').append('<li><strong>' + htmlEncode($('#nomeVisitante').val())
+                        + '</strong>: ' + htmlEncode($('#message').val()) + '</li>');
                     $('#message').val('').focus();
-                });
+                })
             });
         });
 

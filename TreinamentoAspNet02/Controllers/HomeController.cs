@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using TreinamentoAspNet02.Entity;
 
 namespace TreinamentoAspNet02.Controllers
 {
     public class HomeController : Controller
     {
+        private sistema_atendimentoEntities db = new sistema_atendimentoEntities();
         public ActionResult Index()
         {
-            return View();
+            var users = db.AspNetRoles.Where(s => s.Name == "Consultor").FirstOrDefault().AspNetUsers.OrderByDescending(s => s.AutoId).ToList();
+            return View(users);
         }
 
         public ActionResult About()
@@ -20,9 +23,10 @@ namespace TreinamentoAspNet02.Controllers
             return View();
         }
 
-        public ActionResult Chat()
+        public ActionResult Chat(string id)
         {
-            return View();
+            var user = db.AspNetUsers.Find(id);
+            return View(user);
         }
     }
 }
