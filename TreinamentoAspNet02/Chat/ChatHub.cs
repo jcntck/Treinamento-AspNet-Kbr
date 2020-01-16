@@ -11,25 +11,8 @@ namespace TreinamentoAspNet02.Chat
     {
         // Tutorial da Microsoft
         public void Send(string name, string message, string connId)
-        {
-            // Call the addNewMessageToPage method to update clients.
-            //message = DateTime.Now.ToString("HH:mm:ss") + " - " + message;
-            //Clients.Group(group).addNewMessageToPage(name, message);
+        { 
             Clients.Client(connId).addNewMessageToPage(name, message);
-        }
-
-        public void AdicionaGrupo(string grupo)
-        {
-            //(caller)Manda uma chamada de método somente para quem requisitou o
-            //adicionarGrupo
-            Clients.Group(grupo).Send("Aviso", $"{Context.ConnectionId} has joined the group {grupo}.", grupo);
-            Groups.Add(Context.ConnectionId, grupo);
-        }
-
-        public void RemoveGrupo(string grupo)
-        {
-            Clients.Caller.send("Aviso", "Saiu do grupo:" + grupo, grupo);
-            Groups.Remove(Context.ConnectionId, grupo);
         }
     }
 
