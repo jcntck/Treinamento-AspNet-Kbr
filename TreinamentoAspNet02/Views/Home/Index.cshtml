@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<TreinamentoAspNet02.Entity.AspNetUsers>
 @{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Página Inicial";
 }
 
 <div class="row" style="margin: auto">
@@ -8,10 +8,10 @@
     {
         <div class="col-md-3 bg-info" style="min-height: 200px; margin: 10px">
             @*<div class="img" style="width: 100px">
-                <img src="~/Images/Perfil/@consultor.FotoPerfil" class="img-responsive" />
-            </div>*@
+                    <img src="~/Images/Perfil/@consultor.FotoPerfil" class="img-responsive" />
+                </div>*@
             <h2>@consultor.Nome</h2>
-            <a href="@Url.Action("Chat", new { id = consultor.Id })" class="btn btn-default">Iniciar conversa</a>
+            <a href="@Url.Action("Create", "Visitante", new { consultorId = consultor.Id })" class="btn btn-default">Iniciar conversa</a>
         </div>
     }
 </div>

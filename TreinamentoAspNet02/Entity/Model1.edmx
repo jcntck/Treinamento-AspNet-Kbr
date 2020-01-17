@@ -80,6 +80,28 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
+        <EntityType Name="Visitante">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nome" Type="varchar(max)" />
+          <Property Name="Email" Type="varchar(max)" />
+          <Property Name="Celular" Type="varchar(max)" />
+          <Property Name="Id_Consultor" Type="nvarchar" MaxLength="128" />
+        </EntityType>
+        <Association Name="FK_Consultores_Visitantes">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+          <End Role="Visitante" Type="Self.Visitante" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Visitante">
+              <PropertyRef Name="Id_Consultor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -144,6 +166,11 @@
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Visitante" EntityType="Self.Visitante" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Consultores_Visitantes" Association="Self.FK_Consultores_Visitantes">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Visitante" EntitySet="Visitante" />
+          </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
@@ -227,6 +254,7 @@
           <NavigationProperty Name="AspNetUserLogins" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserLogins" />
           <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
           <Property Name="AutoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Visitante" Relationship="sistema_atendimentoModel.FK_Consultores_Visitantes" FromRole="AspNetUsers" ToRole="Visitante" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -289,7 +317,35 @@
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
           </AssociationSet>
+          <EntitySet Name="Visitante" EntityType="sistema_atendimentoModel.Visitante" />
+          <AssociationSet Name="FK_Consultores_Visitantes" Association="sistema_atendimentoModel.FK_Consultores_Visitantes">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Visitante" EntitySet="Visitante" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Visitante">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Celular" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Id_Consultor" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUsers" Relationship="sistema_atendimentoModel.FK_Consultores_Visitantes" FromRole="Visitante" ToRole="AspNetUsers" />
+        </EntityType>
+        <Association Name="FK_Consultores_Visitantes">
+          <End Type="sistema_atendimentoModel.AspNetUsers" Role="AspNetUsers" Multiplicity="0..1" />
+          <End Type="sistema_atendimentoModel.Visitante" Role="Visitante" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Visitante">
+              <PropertyRef Name="Id_Consultor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -374,6 +430,17 @@
               <ScalarProperty Name="Id" ColumnName="UserId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="Visitante">
+            <EntityTypeMapping TypeName="sistema_atendimentoModel.Visitante">
+              <MappingFragment StoreEntitySet="Visitante">
+                <ScalarProperty Name="Id_Consultor" ColumnName="Id_Consultor" />
+                <ScalarProperty Name="Celular" ColumnName="Celular" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

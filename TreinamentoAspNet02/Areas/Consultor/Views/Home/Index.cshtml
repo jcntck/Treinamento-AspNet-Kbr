@@ -7,12 +7,8 @@
 
 <link href="~/Content/sweetalert.css" rel="stylesheet" />
 
-<label class="control-label">Seu Id de visitante</label>
-<br />
-<input type="text" id="visitante" />
 <div class="form-group col-xl-12">
-    <label class="control-label">Seu Id de Conexão</label><br />
-    <input type="text" class="col-lg-12 text-primary" id="connId" readonly />
+    <input type="hidden" class="col-lg-12 text-primary" id="connId" value="@User.Identity.GetUserId()" readonly />
 
     <label class="control-label">Your Message</label><br />
     <input type="text" class="col-lg-10 text-primary" id="message">&nbsp;&nbsp;&nbsp;&nbsp;
@@ -31,13 +27,15 @@
     <script src="~/Content/sweetalert.min.js"></script>
     <script src="~/signalr/hubs"></script>
     <script>
-        var nomeConsultor = '';
-        var connexao = '';
         $(function () {
             var chat = $.connection.chatHub;
 
             chat.client.addNewMessageToPage = function (name, message) {
                 $('#discussion').append('<li><strong>' + htmlEncode(name) + '</strong>: ' + htmlEncode(message) + '</li>');
+            };
+
+            chat.client.addNewNotificationToPage = function (name) {
+                $('#discussion').append('<p class="text-info"><strong>' + htmlEncode(name) + '</strong></p>');
             };
 
             $('#message').focus();
@@ -48,19 +46,18 @@
             });
 
             $.connection.hub.start().done(function () {
-                console.log($.connection.hub.id);
-                $('#connId').val($.connection.hub.id);
-                $('#sendmessage').click(function () {
-                    var id = $('#visitante').val();
-                    chat.server.send($('#nomeConsultor').val(), $('#message').val(), id);
-                    // Clear text box and reset focus for next comment.
-                    $('#discussion').append('<li><strong>' + htmlEncode($('#nomeConsultor').val())
-                        + '</strong>: ' + htmlEncode($('#message').val()) + '</li>');
-                    $('#message').val('').focus();
-                })
-            })
+                chat.server.joinRoom($('#connId').val(), $('#nomeConsultor').val());
 
-        })
+                $('#sendmessage').click(function () {
+
+                    chat.server.send($('#nomeConsultor').val(), $('#message').val(), $('#connId').val());
+                    $('#message').val('').focus();
+
+                });
+
+            });
+
+        });
         // This optional function html-encodes messages for display in the page.
         function htmlEncode(value) {
             var encodedValue = $('<div />').text(value).html();

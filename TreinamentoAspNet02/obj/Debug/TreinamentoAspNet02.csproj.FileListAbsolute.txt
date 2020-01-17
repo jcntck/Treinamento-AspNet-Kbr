@@ -354,3 +354,4 @@ C:\Users\KBRTEC - 03\Desktop\TreinamentoAspNet02\TreinamentoAspNet02\bin\Microso
 C:\Users\KBRTEC - 03\Desktop\TreinamentoAspNet02\TreinamentoAspNet02\bin\Microsoft.AspNet.SignalR.SystemWeb.xml
 C:\Users\KBRTEC - 03\Desktop\TreinamentoAspNet02\TreinamentoAspNet02\bin\pt-br\Microsoft.AspNet.SignalR.Core.resources.dll
 C:\Users\KBRTEC - 03\Desktop\TreinamentoAspNet02\TreinamentoAspNet02\bin\pt-br\Microsoft.AspNet.SignalR.SystemWeb.resources.dll
+C:\Users\KBRTEC - 03\Desktop\TreinamentoAspNet02\TreinamentoAspNet02\obj\Debug\TreinamentoAspNet02.Migrations.Visitante.resources
