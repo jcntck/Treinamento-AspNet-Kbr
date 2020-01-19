@@ -1,0 +1,24 @@
+﻿.cardConsultor {
+    text-align: center;
+    border: 2px solid #eaeaea;
+    border-radius: 16px;
+}
+
+.divPerfil {
+    margin:auto;
+}
+
+.fotoPerfil {
+    position: relative;
+    margin-top: 15px;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+    .fotoPerfil img {
+        position: absolute;
+        left: -50%;
+        width: 120px;
+    }

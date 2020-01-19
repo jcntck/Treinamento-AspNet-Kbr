@@ -12,12 +12,14 @@ namespace TreinamentoAspNet02.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class sysdiagrams
+    public partial class Visitante
     {
-        public string name { get; set; }
-        public int principal_id { get; set; }
-        public int diagram_id { get; set; }
-        public Nullable<int> version { get; set; }
-        public byte[] definition { get; set; }
+        public int Id { get; set; }
+        public string Nome { get; set; }
+        public string Email { get; set; }
+        public string Celular { get; set; }
+        public string Id_Consultor { get; set; }
+    
+        public virtual AspNetUsers AspNetUsers { get; set; }
     }
 }

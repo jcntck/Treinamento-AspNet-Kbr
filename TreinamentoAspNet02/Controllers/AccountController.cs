@@ -89,6 +89,9 @@ namespace TreinamentoAspNet02.Controllers
                     if (UserManager.IsInRole(user.Id, "Admin"))
                         return RedirectToLocal("/Admin");
 
+                    if (UserManager.IsInRole(user.Id, "Consultor"))
+                        return RedirectToLocal("/Consultor");
+
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -413,6 +416,15 @@ namespace TreinamentoAspNet02.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
+
+            //string id = User.Identity.GetUserId();
+            //var connectedUser = db.ConnectedUsers.First(c => c.Id == id);
+            //if (connectedUser != null )
+            //{
+            //    db.ConnectedUsers.Remove(connectedUser);
+            //    db.SaveChanges();
+            //}
+            
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
         }

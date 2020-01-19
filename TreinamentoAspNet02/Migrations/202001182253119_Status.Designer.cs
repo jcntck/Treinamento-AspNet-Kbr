@@ -7,13 +7,13 @@ namespace TreinamentoAspNet02.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class Visitante : IMigrationMetadata
+    public sealed partial class Status : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Visitante));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Status));
         
         string IMigrationMetadata.Id
         {
-            get { return "202001171405275_Visitante"; }
+            get { return "202001182253119_Status"; }
         }
         
         string IMigrationMetadata.Source

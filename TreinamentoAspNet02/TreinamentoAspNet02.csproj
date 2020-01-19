@@ -184,46 +184,46 @@
     <Compile Include="Areas\Consultor\ConsultorAreaRegistration.cs" />
     <Compile Include="Areas\Consultor\Controllers\HomeController.cs" />
     <Compile Include="Chat\ChatHub.cs" />
-    <Compile Include="Chat\ChatModels.cs" />
+    <Compile Include="Chat\UserDetail.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\VisitanteController.cs" />
     <Compile Include="Entity\AspNetRoles.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>Casa.tt</DependentUpon>
     </Compile>
     <Compile Include="Entity\AspNetUserClaims.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>Casa.tt</DependentUpon>
     </Compile>
     <Compile Include="Entity\AspNetUserLogins.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>Casa.tt</DependentUpon>
     </Compile>
     <Compile Include="Entity\AspNetUsers.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>Casa.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\Casa.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Casa.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\Casa.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Casa.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\Casa.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Casa.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\ConnectedUsers.cs">
+      <DependentUpon>Casa.tt</DependentUpon>
     </Compile>
     <Compile Include="Entity\C__MigrationHistory.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\Model1.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\Model1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\Model1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\sysdiagrams.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>Casa.tt</DependentUpon>
     </Compile>
     <Compile Include="Entity\Visitante.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>Casa.tt</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -237,12 +237,13 @@
     <Compile Include="Migrations\202001141725462_Consultor 1.0.Designer.cs">
       <DependentUpon>202001141725462_Consultor 1.0.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202001171405275_Visitante.cs" />
-    <Compile Include="Migrations\202001171405275_Visitante.Designer.cs">
-      <DependentUpon>202001171405275_Visitante.cs</DependentUpon>
+    <Compile Include="Migrations\202001182253119_Status.cs" />
+    <Compile Include="Migrations\202001182253119_Status.Designer.cs">
+      <DependentUpon>202001182253119_Status.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ConsultoresModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\VisitanteModel.cs" />
@@ -256,18 +257,20 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Consultor.css" />
     <Content Include="Content\Login.css" />
+    <Content Include="Content\Site.css" />
     <Content Include="Content\sweetalert.css" />
     <Content Include="Content\sweetalert.min.js" />
-    <Content Include="Entity\Model1.Context.tt">
+    <Content Include="Entity\Casa.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model1.edmx</DependentUpon>
-      <LastGenOutput>Model1.Context.cs</LastGenOutput>
+      <DependentUpon>Casa.edmx</DependentUpon>
+      <LastGenOutput>Casa.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Entity\Model1.tt">
+    <Content Include="Entity\Casa.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model1.edmx</DependentUpon>
-      <LastGenOutput>Model1.cs</LastGenOutput>
+      <DependentUpon>Casa.edmx</DependentUpon>
+      <LastGenOutput>Casa.cs</LastGenOutput>
     </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -285,15 +288,15 @@
     <Content Include="Areas\Consultor\Views\Home\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Consultores\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Atendimentos\Index.cshtml" />
-    <EntityDeploy Include="Entity\Model1.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Model1.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Entity\Model1.edmx.diagram">
-      <DependentUpon>Model1.edmx</DependentUpon>
-    </Content>
     <Content Include="Areas\Admin\Views\Consultores\Register.cshtml" />
     <Content Include="Areas\Admin\Views\Consultores\ChangePassword.cshtml" />
+    <EntityDeploy Include="Entity\Casa.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Casa.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Entity\Casa.edmx.diagram">
+      <DependentUpon>Casa.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -373,8 +376,8 @@
     <EmbeddedResource Include="Migrations\202001141725462_Consultor 1.0.resx">
       <DependentUpon>202001141725462_Consultor 1.0.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001171405275_Visitante.resx">
-      <DependentUpon>202001171405275_Visitante.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202001182253119_Status.resx">
+      <DependentUpon>202001182253119_Status.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

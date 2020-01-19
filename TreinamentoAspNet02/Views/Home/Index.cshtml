@@ -3,15 +3,109 @@
     ViewBag.Title = "Página Inicial";
 }
 
-<div class="row" style="margin: auto">
-    @foreach (var consultor in Model)
-    {
-        <div class="col-md-3 bg-info" style="min-height: 200px; margin: 10px">
-            @*<div class="img" style="width: 100px">
-                    <img src="~/Images/Perfil/@consultor.FotoPerfil" class="img-responsive" />
-                </div>*@
-            <h2>@consultor.Nome</h2>
-            <a href="@Url.Action("Create", "Visitante", new { consultorId = consultor.Id })" class="btn btn-default">Iniciar conversa</a>
-        </div>
-    }
-</div>
+<h2>Consultores online:</h2>
+
+<div class="row" id="listagem" style="margin: auto"></div>
+
+@section scripts {
+    <script src="~/Scripts/jquery.signalR-2.2.2.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script>
+        $(function () {
+
+            var chat = $.connection.chatHub;
+
+            chat.client.gerarListagem = function (connectedUsers) {
+                if (connectedUsers.length > 0) {
+                    listarConsultores(connectedUsers)
+                } else {
+                    $('#listagem').html("Não há consultores online no momento.");
+                }
+            }
+
+            chat.client.statusConsultor = function (idConsultor, status) {
+                if (status) {
+                    console.log(`Consultor Id[${idConsultor}] está ocupado.`)
+                    $(".pStatus").each(function () {
+                        if ($(this).attr("id") == "status_" + idConsultor) {
+                            $(this).removeClass("label-success");
+                            $(this).addClass("label-danger");
+                            $(this).html("Ocupado");
+                        }
+                    })
+                } else {
+                    console.log(`Consultor Id[${idConsultor}] está disponivel.`)
+                    $(".pStatus").each(function () {
+                        if ($(this).attr("id") == "status_" + idConsultor) {
+                            $(this).removeClass("label-danger");
+                            $(this).addClass("label-success");
+                            $(this).html("Disponível");
+                        }
+                    }
+                )}
+            }
+
+            $.connection.hub.start().done(function () {
+                chat.server.iniciarListagem();
+            })
+
+            function listarConsultores(connectedUsers) {
+                connectedUsers = JSON.stringify({ 'connectedUsers': connectedUsers })
+                $.ajax({
+                    url: "/Home/Conectados",
+                    type: "POST",
+                    data: connectedUsers,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "JSON",
+                    success: function (data) {
+                        console.log(data)
+                        var listagem = $("#listagem");
+                        listagem.empty();
+                        for (i = 0; i < data.length; i++) {
+                            var div = $("<div />", {
+                                class: "col-md-3 cardConsultor",
+                                style: "min-height: 200px; margin: 10px 10px 10px 0; padding: 20px;"
+                            });
+
+                            var id = $("<input />", {
+                                type: "hidden",
+                                id: "idConsultor",
+                                value: data[i].Id
+                            });
+
+                            var status = $("<p />", {
+                                class: (data[i].Ocupado ? "label label-danger" : "label label-success") + " text-uppercase pStatus",
+                                id: "status_" + data[i].Id,
+                                style: "font-size: 1em;"
+                            }).html((data[i].Ocupado ? "Ocupado" : "Disponível"))
+
+                            var divFoto = $("<div />", {
+                                class: "divPerfil"
+                            })
+                            var fotoPerfil = $("<img />", {
+                                src: "/Images/Perfil/" + (data[i].FotoPerfil ? data[i].FotoPerfil : "semfoto.jpg"),
+                                class: "fotoPerfil"
+                            })
+                            divFoto.append(fotoPerfil);
+
+                            var nome = $("<h2 />").html(data[i].Nome);
+
+                            div.append(id);
+                            div.append(status);
+                            div.append(divFoto);
+                            div.append(nome);
+
+                            listagem.append(div);
+
+                        }
+                    },
+                    error: function (data) {
+                        console.log("Error");
+                        console.log(data);
+                    }
+                });
+
+            }
+        })
+    </script>
+}

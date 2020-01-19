@@ -30,7 +30,7 @@ namespace TreinamentoAspNet02.Entity
         public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogins> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Visitante> Visitante { get; set; }
+        public virtual DbSet<ConnectedUsers> ConnectedUsers { get; set; }
     }
 }
