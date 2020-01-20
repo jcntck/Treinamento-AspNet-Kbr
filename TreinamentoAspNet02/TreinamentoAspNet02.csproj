@@ -191,49 +191,46 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\VisitanteController.cs" />
     <Compile Include="Entity\AspNetRoles.cs">
-      <DependentUpon>Casa.tt</DependentUpon>
+      <DependentUpon>SistemaAtendimento.tt</DependentUpon>
     </Compile>
     <Compile Include="Entity\AspNetUserClaims.cs">
-      <DependentUpon>Casa.tt</DependentUpon>
+      <DependentUpon>SistemaAtendimento.tt</DependentUpon>
     </Compile>
     <Compile Include="Entity\AspNetUserLogins.cs">
-      <DependentUpon>Casa.tt</DependentUpon>
+      <DependentUpon>SistemaAtendimento.tt</DependentUpon>
     </Compile>
     <Compile Include="Entity\AspNetUsers.cs">
-      <DependentUpon>Casa.tt</DependentUpon>
+      <DependentUpon>SistemaAtendimento.tt</DependentUpon>
     </Compile>
     <Compile Include="Entity\Atendimentos.cs">
-      <DependentUpon>Casa.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\Casa.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Casa.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\Casa.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Casa.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entity\Casa.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Casa.edmx</DependentUpon>
+      <DependentUpon>SistemaAtendimento.tt</DependentUpon>
     </Compile>
     <Compile Include="Entity\C__MigrationHistory.cs">
-      <DependentUpon>Casa.tt</DependentUpon>
+      <DependentUpon>SistemaAtendimento.tt</DependentUpon>
     </Compile>
     <Compile Include="Entity\Mensagens.cs">
-      <DependentUpon>Casa.tt</DependentUpon>
+      <DependentUpon>SistemaAtendimento.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entity\sp_helpdiagramdefinition_Result.cs">
-      <DependentUpon>Casa.tt</DependentUpon>
+    <Compile Include="Entity\SistemaAtendimento.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SistemaAtendimento.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entity\sp_helpdiagrams_Result.cs">
-      <DependentUpon>Casa.tt</DependentUpon>
+    <Compile Include="Entity\SistemaAtendimento.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SistemaAtendimento.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\SistemaAtendimento.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SistemaAtendimento.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\sysdiagrams.cs">
+      <DependentUpon>SistemaAtendimento.tt</DependentUpon>
     </Compile>
     <Compile Include="Entity\Visitante.cs">
-      <DependentUpon>Casa.tt</DependentUpon>
+      <DependentUpon>SistemaAtendimento.tt</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -272,15 +269,15 @@
     <Content Include="Content\Site.css" />
     <Content Include="Content\sweetalert.css" />
     <Content Include="Content\sweetalert.min.js" />
-    <Content Include="Entity\Casa.Context.tt">
+    <Content Include="Entity\SistemaAtendimento.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Casa.edmx</DependentUpon>
-      <LastGenOutput>Casa.Context.cs</LastGenOutput>
+      <DependentUpon>SistemaAtendimento.edmx</DependentUpon>
+      <LastGenOutput>SistemaAtendimento.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Entity\Casa.tt">
+    <Content Include="Entity\SistemaAtendimento.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Casa.edmx</DependentUpon>
-      <LastGenOutput>Casa.cs</LastGenOutput>
+      <DependentUpon>SistemaAtendimento.edmx</DependentUpon>
+      <LastGenOutput>SistemaAtendimento.cs</LastGenOutput>
     </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -300,14 +297,14 @@
     <Content Include="Areas\Admin\Views\Atendimentos\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Consultores\Register.cshtml" />
     <Content Include="Areas\Admin\Views\Consultores\ChangePassword.cshtml" />
-    <EntityDeploy Include="Entity\Casa.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Casa.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Entity\Casa.edmx.diagram">
-      <DependentUpon>Casa.edmx</DependentUpon>
-    </Content>
     <Content Include="Areas\Admin\Views\Atendimentos\Details.cshtml" />
+    <EntityDeploy Include="Entity\SistemaAtendimento.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>SistemaAtendimento.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Entity\SistemaAtendimento.edmx.diagram">
+      <DependentUpon>SistemaAtendimento.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

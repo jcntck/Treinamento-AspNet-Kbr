@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="sistema_atendimentoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="sistema_atendimentoModel1.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="__MigrationHistory">
           <Key>
             <PropertyRef Name="MigrationId" />
@@ -78,8 +78,8 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Id_Consultor" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="Id_Visitante" Type="int" />
-          <Property Name="Data" Type="date" />
           <Property Name="Encerrado" Type="bit" Nullable="false" />
+          <Property Name="Data" Type="datetime" />
         </EntityType>
         <EntityType Name="Mensagens">
           <Key>
@@ -91,6 +91,16 @@
           <Property Name="enviadoPorConsultor" Type="nvarchar" MaxLength="128" />
           <Property Name="enviadoPorVisitante" Type="int" />
           <Property Name="Id_Atendimento" Type="int" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="Visitante">
           <Key>
@@ -193,38 +203,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
-        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="version" Type="int" Mode="In" />
-          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
-        </Function>
-        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="version" Type="int" Mode="In" />
-          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
-        </Function>
-        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <EntityContainer Name="sistema_atendimentoModelStoreContainer">
+        <EntityContainer Name="sistema_atendimentoModel1StoreContainer">
           <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
@@ -233,6 +212,7 @@
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Atendimentos" EntityType="Self.Atendimentos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Mensagens" EntityType="Self.Mensagens" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Visitante" EntityType="Self.Visitante" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Atendimentos_Consultor" Association="Self.FK_Atendimentos_Consultor">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -266,7 +246,7 @@
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="sistema_atendimentoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="sistema_atendimentoModel1" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="C__MigrationHistory">
           <Key>
             <PropertyRef Name="MigrationId" />
@@ -328,9 +308,54 @@
           <Property Name="AutoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="AspNetUserClaims" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserClaims" />
           <NavigationProperty Name="AspNetUserLogins" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserLogins" />
+          <NavigationProperty Name="Atendimentos" Relationship="Self.FK_Atendimentos_Consultor" FromRole="AspNetUsers" ToRole="Atendimentos" />
           <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
           <Property Name="Ocupado" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Atendimentos" Relationship="sistema_atendimentoModel.FK_Atendimentos_Consultor" FromRole="AspNetUsers" ToRole="Atendimentos" />
+        </EntityType>
+        <EntityType Name="Atendimentos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id_Consultor" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Id_Visitante" Type="Int32" />
+          <Property Name="Encerrado" Type="Boolean" Nullable="false" />
+          <Property Name="Data" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_Atendimentos_Consultor" FromRole="Atendimentos" ToRole="AspNetUsers" />
+          <NavigationProperty Name="Visitante" Relationship="Self.FK_Atendimentos_Visitante" FromRole="Atendimentos" ToRole="Visitante" />
+          <NavigationProperty Name="Mensagens" Relationship="Self.FK_Mensagens_Atendimento" FromRole="Atendimentos" ToRole="Mensagens" />
+        </EntityType>
+        <EntityType Name="Mensagens">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Mensagem" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Arquivo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="enviadoPorConsultor" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="enviadoPorVisitante" Type="Int32" />
+          <Property Name="Id_Atendimento" Type="Int32" />
+          <NavigationProperty Name="Atendimentos" Relationship="Self.FK_Mensagens_Atendimento" FromRole="Mensagens" ToRole="Atendimentos" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Visitante">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Celular" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Atendimentos" Relationship="Self.FK_Atendimentos_Visitante" FromRole="Visitante" ToRole="Atendimentos" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
@@ -360,112 +385,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="AspNetUserRoles">
-          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="*" />
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="*" />
-        </Association>
-        <EntityContainer Name="sistema_atendimentoEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="C__MigrationHistory" EntityType="Self.C__MigrationHistory" />
-          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" />
-          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" />
-          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" />
-          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" />
-          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
-          </AssociationSet>
-          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
-          </AssociationSet>
-          <AssociationSet Name="AspNetUserRoles" Association="Self.AspNetUserRoles">
-            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-          </AssociationSet>
-          <EntitySet Name="Visitante" EntityType="sistema_atendimentoModel.Visitante" />
-          <EntitySet Name="Atendimentos" EntityType="sistema_atendimentoModel.Atendimentos" />
-          <EntitySet Name="Mensagens" EntityType="sistema_atendimentoModel.Mensagens" />
-          <AssociationSet Name="FK_Atendimentos_Consultor" Association="sistema_atendimentoModel.FK_Atendimentos_Consultor">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="Atendimentos" EntitySet="Atendimentos" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Atendimentos_Visitante" Association="sistema_atendimentoModel.FK_Atendimentos_Visitante">
-            <End Role="Visitante" EntitySet="Visitante" />
-            <End Role="Atendimentos" EntitySet="Atendimentos" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Mensagens_Atendimento" Association="sistema_atendimentoModel.FK_Mensagens_Atendimento">
-            <End Role="Atendimentos" EntitySet="Atendimentos" />
-            <End Role="Mensagens" EntitySet="Mensagens" />
-          </AssociationSet>
-          <FunctionImport Name="sp_alterdiagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="version" Mode="In" Type="Int32" />
-            <Parameter Name="definition" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="sp_creatediagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="version" Mode="In" Type="Int32" />
-            <Parameter Name="definition" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="sp_dropdiagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(sistema_atendimentoModel.sp_helpdiagramdefinition_Result)">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(sistema_atendimentoModel.sp_helpdiagrams_Result)">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_renamediagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="new_diagramname" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="sp_upgraddiagrams" />
-        </EntityContainer>
-        <EntityType Name="Visitante">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Nome" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Celular" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Atendimentos" Relationship="sistema_atendimentoModel.FK_Atendimentos_Visitante" FromRole="Visitante" ToRole="Atendimentos" />
-        </EntityType>
-        <EntityType Name="Atendimentos">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Id_Consultor" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="Id_Visitante" Type="Int32" />
-          <NavigationProperty Name="AspNetUsers" Relationship="sistema_atendimentoModel.FK_Atendimentos_Consultor" FromRole="Atendimentos" ToRole="AspNetUsers" />
-          <NavigationProperty Name="Visitante" Relationship="sistema_atendimentoModel.FK_Atendimentos_Visitante" FromRole="Atendimentos" ToRole="Visitante" />
-          <NavigationProperty Name="Mensagens" Relationship="sistema_atendimentoModel.FK_Mensagens_Atendimento" FromRole="Atendimentos" ToRole="Mensagens" />
-          <Property Name="Encerrado" Type="Boolean" Nullable="false" />
-          <Property Name="Data" Type="DateTime" Precision="0" />
-        </EntityType>
-        <EntityType Name="Mensagens">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Mensagem" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Arquivo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Id_Atendimento" Type="Int32" />
-          <NavigationProperty Name="Atendimentos" Relationship="sistema_atendimentoModel.FK_Mensagens_Atendimento" FromRole="Mensagens" ToRole="Atendimentos" />
-          <Property Name="enviadoPorConsultor" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="enviadoPorVisitante" Type="Int32" />
-        </EntityType>
         <Association Name="FK_Atendimentos_Consultor">
-          <End Type="sistema_atendimentoModel.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
-          <End Type="sistema_atendimentoModel.Atendimentos" Role="Atendimentos" Multiplicity="*" />
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="Atendimentos" Type="Self.Atendimentos" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUsers">
               <PropertyRef Name="Id" />
@@ -476,8 +398,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Atendimentos_Visitante">
-          <End Type="sistema_atendimentoModel.Visitante" Role="Visitante" Multiplicity="0..1" />
-          <End Type="sistema_atendimentoModel.Atendimentos" Role="Atendimentos" Multiplicity="*" />
+          <End Role="Visitante" Type="Self.Visitante" Multiplicity="0..1" />
+          <End Role="Atendimentos" Type="Self.Atendimentos" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Visitante">
               <PropertyRef Name="Id" />
@@ -488,8 +410,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Mensagens_Atendimento">
-          <End Type="sistema_atendimentoModel.Atendimentos" Role="Atendimentos" Multiplicity="0..1" />
-          <End Type="sistema_atendimentoModel.Mensagens" Role="Mensagens" Multiplicity="*" />
+          <End Role="Atendimentos" Type="Self.Atendimentos" Multiplicity="0..1" />
+          <End Role="Mensagens" Type="Self.Mensagens" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Atendimentos">
               <PropertyRef Name="Id" />
@@ -499,25 +421,53 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <ComplexType Name="sp_helpdiagramdefinition_Result">
-          <Property Type="Int32" Name="version" Nullable="true" />
-          <Property Type="Binary" Name="definition" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="sp_helpdiagrams_Result">
-          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
-          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
-          <Property Type="Int32" Name="ID" Nullable="false" />
-          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
-          <Property Type="Int32" Name="OwnerID" Nullable="false" />
-        </ComplexType>
+        <Association Name="AspNetUserRoles">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="*" />
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="sistema_atendimentoEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="C__MigrationHistory" EntityType="Self.C__MigrationHistory" />
+          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" />
+          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" />
+          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" />
+          <EntitySet Name="Atendimentos" EntityType="Self.Atendimentos" />
+          <EntitySet Name="Mensagens" EntityType="Self.Mensagens" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="Visitante" EntityType="Self.Visitante" />
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Atendimentos_Consultor" Association="Self.FK_Atendimentos_Consultor">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Atendimentos" EntitySet="Atendimentos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Atendimentos_Visitante" Association="Self.FK_Atendimentos_Visitante">
+            <End Role="Visitante" EntitySet="Visitante" />
+            <End Role="Atendimentos" EntitySet="Atendimentos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Mensagens_Atendimento" Association="Self.FK_Mensagens_Atendimento">
+            <End Role="Atendimentos" EntitySet="Atendimentos" />
+            <End Role="Mensagens" EntitySet="Mensagens" />
+          </AssociationSet>
+          <AssociationSet Name="AspNetUserRoles" Association="Self.AspNetUserRoles">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+          </AssociationSet>
+        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="sistema_atendimentoModelStoreContainer" CdmEntityContainer="sistema_atendimentoEntities">
+        <EntityContainerMapping StorageEntityContainer="sistema_atendimentoModel1StoreContainer" CdmEntityContainer="sistema_atendimentoEntities">
           <EntitySetMapping Name="C__MigrationHistory">
-            <EntityTypeMapping TypeName="sistema_atendimentoModel.C__MigrationHistory">
+            <EntityTypeMapping TypeName="sistema_atendimentoModel1.C__MigrationHistory">
               <MappingFragment StoreEntitySet="__MigrationHistory">
                 <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
                 <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
@@ -527,7 +477,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AspNetRoles">
-            <EntityTypeMapping TypeName="sistema_atendimentoModel.AspNetRoles">
+            <EntityTypeMapping TypeName="sistema_atendimentoModel1.AspNetRoles">
               <MappingFragment StoreEntitySet="AspNetRoles">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -535,7 +485,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AspNetUserClaims">
-            <EntityTypeMapping TypeName="sistema_atendimentoModel.AspNetUserClaims">
+            <EntityTypeMapping TypeName="sistema_atendimentoModel1.AspNetUserClaims">
               <MappingFragment StoreEntitySet="AspNetUserClaims">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
@@ -545,7 +495,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AspNetUserLogins">
-            <EntityTypeMapping TypeName="sistema_atendimentoModel.AspNetUserLogins">
+            <EntityTypeMapping TypeName="sistema_atendimentoModel1.AspNetUserLogins">
               <MappingFragment StoreEntitySet="AspNetUserLogins">
                 <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
                 <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
@@ -554,7 +504,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AspNetUsers">
-            <EntityTypeMapping TypeName="sistema_atendimentoModel.AspNetUsers">
+            <EntityTypeMapping TypeName="sistema_atendimentoModel1.AspNetUsers">
               <MappingFragment StoreEntitySet="AspNetUsers">
                 <ScalarProperty Name="Ocupado" ColumnName="Ocupado" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -576,7 +526,51 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="AspNetUserRoles" TypeName="sistema_atendimentoModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
+          <EntitySetMapping Name="Atendimentos">
+            <EntityTypeMapping TypeName="sistema_atendimentoModel1.Atendimentos">
+              <MappingFragment StoreEntitySet="Atendimentos">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Id_Consultor" ColumnName="Id_Consultor" />
+                <ScalarProperty Name="Id_Visitante" ColumnName="Id_Visitante" />
+                <ScalarProperty Name="Encerrado" ColumnName="Encerrado" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mensagens">
+            <EntityTypeMapping TypeName="sistema_atendimentoModel1.Mensagens">
+              <MappingFragment StoreEntitySet="Mensagens">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Mensagem" ColumnName="Mensagem" />
+                <ScalarProperty Name="Arquivo" ColumnName="Arquivo" />
+                <ScalarProperty Name="enviadoPorConsultor" ColumnName="enviadoPorConsultor" />
+                <ScalarProperty Name="enviadoPorVisitante" ColumnName="enviadoPorVisitante" />
+                <ScalarProperty Name="Id_Atendimento" ColumnName="Id_Atendimento" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="sistema_atendimentoModel1.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Visitante">
+            <EntityTypeMapping TypeName="sistema_atendimentoModel1.Visitante">
+              <MappingFragment StoreEntitySet="Visitante">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Celular" ColumnName="Celular" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="AspNetUserRoles" TypeName="sistema_atendimentoModel1.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
             <EndProperty Name="AspNetRoles">
               <ScalarProperty Name="Id" ColumnName="RoleId" />
             </EndProperty>
@@ -584,63 +578,6 @@
               <ScalarProperty Name="Id" ColumnName="UserId" />
             </EndProperty>
           </AssociationSetMapping>
-          <EntitySetMapping Name="Visitante">
-            <EntityTypeMapping TypeName="sistema_atendimentoModel.Visitante">
-              <MappingFragment StoreEntitySet="Visitante">
-                <ScalarProperty Name="Celular" ColumnName="Celular" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Nome" ColumnName="Nome" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Atendimentos">
-            <EntityTypeMapping TypeName="sistema_atendimentoModel.Atendimentos">
-              <MappingFragment StoreEntitySet="Atendimentos">
-                <ScalarProperty Name="Data" ColumnName="Data" />
-                <ScalarProperty Name="Encerrado" ColumnName="Encerrado" />
-                <ScalarProperty Name="Id_Visitante" ColumnName="Id_Visitante" />
-                <ScalarProperty Name="Id_Consultor" ColumnName="Id_Consultor" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Mensagens">
-            <EntityTypeMapping TypeName="sistema_atendimentoModel.Mensagens">
-              <MappingFragment StoreEntitySet="Mensagens">
-                <ScalarProperty Name="enviadoPorVisitante" ColumnName="enviadoPorVisitante" />
-                <ScalarProperty Name="enviadoPorConsultor" ColumnName="enviadoPorConsultor" />
-                <ScalarProperty Name="Id_Atendimento" ColumnName="Id_Atendimento" />
-                <ScalarProperty Name="Arquivo" ColumnName="Arquivo" />
-                <ScalarProperty Name="Mensagem" ColumnName="Mensagem" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="sistema_atendimentoModel.Store.sp_alterdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="sistema_atendimentoModel.Store.sp_creatediagram" />
-          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="sistema_atendimentoModel.Store.sp_dropdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="sistema_atendimentoModel.Store.sp_helpdiagramdefinition">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="sistema_atendimentoModel.sp_helpdiagramdefinition_Result">
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="sistema_atendimentoModel.Store.sp_helpdiagrams">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="sistema_atendimentoModel.sp_helpdiagrams_Result">
-                <ScalarProperty Name="Database" ColumnName="Database" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Owner" ColumnName="Owner" />
-                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="sistema_atendimentoModel.Store.sp_renamediagram" />
-          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="sistema_atendimentoModel.Store.sp_upgraddiagrams" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

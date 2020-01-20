@@ -31,6 +31,7 @@
         @* Disponível *@
         <div class="hidden" id="areaDisponivel">
             <div class="well well-lg bg-mensagens flex-column-reverse">
+                <div id="avisos"></div>
                 <div id="mensagens" style="overflow-y: scroll"></div>
             </div>
 
@@ -65,13 +66,32 @@
             var chat = $.connection.chatHub;
             var idAtendimento = null;
 
+            chat.client.aviso = function () {
+                var aviso = $("<div />", {
+                    class: "alert alert-warning",
+                    role: "alert"
+                }).html("Agora você está <strong>DÍSPONIVEL</strong> para novos atendimentos. Mude seu Status para <strong>OCUPADO</strong> caso queira parar de receber novos atendimentos.");
+                $("#avisos").append(aviso);
+            }
+
             chat.client.addNewMessageToPage = function (name, message) {
                 $('#mensagens').append('<li><strong>' + htmlEncode(name) + '</strong>: ' + htmlEncode(message) + '</li>');
             };
 
             chat.client.novoAtendimento = function (id, name) {
                 idAtendimento = id;
-                $('#mensagens').append('<p class="text-info"><strong>' + htmlEncode(name) + '</strong> iniciou um novo atendimento com você. <em>Atendimento #' + id + '</em></p>');
+
+                var aviso = $("<div />", {
+                    class: "alert alert-info",
+                    role: "alert"
+                }).html(`<em>#${htmlEncode(id)}</em> - <strong>${htmlEncode(name)}</strong> iníciou um novo atendimento com você.`);
+
+                $("#avisos").empty();
+                $('#avisos').append(aviso);
+            };
+
+            chat.client.errorMessage = function () {
+                alert("Você já está conectado")
             };
 
             $('#message').focus();
@@ -87,12 +107,12 @@
 
                 getStatus();
                 chat.server.connect("@User.Identity.Name", true, 0);
-                chat.server.joinRoom(idConsultor, nomeConsultor);
 
                 $("#ckStatus").click(function () {
                     if ($(this).is(":checked")) {
                         trocarStatus();
                         atualizarHTML("text-danger", "text-success", "Disponível", "#areaOcupado", "#areaDisponivel");
+                        chat.server.joinRoom(idConsultor, nomeConsultor);
                         chat.server.status(idConsultor, false);
                     } else {
                         trocarStatus();

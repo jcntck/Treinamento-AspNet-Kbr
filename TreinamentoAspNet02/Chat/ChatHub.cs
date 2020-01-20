@@ -50,12 +50,27 @@ namespace TreinamentoAspNet02.Chat
             var id = Context.ConnectionId;
             if (user)
             {
-                if (ConnectedUsers.Count(x => x.ConnectionId == id) == 0)
+                var consultor = db.AspNetUsers.FirstOrDefault(x => x.UserName == Context.User.Identity.Name);
+                if (consultor != null)
                 {
-                    ConnectedUsers.Add(new UserDetail { ConnectionId = id, UserName = userName });
-
-                    Clients.All.gerarListagem(ConnectedUsers);
+                    consultor.Ocupado = true;
+                    db.SaveChanges();
                 }
+
+                var item = ConnectedUsers.FirstOrDefault(x => x.UserName == Context.User.Identity.Name);
+                if (item == null)
+                {
+                    ConnectedUsers.Add(new UserDetail { 
+                        ConnectionId = id,
+                        UserName = userName,
+                    });
+                }
+                else
+                {
+                    Clients.Client(item.ConnectionId).errorMessage();
+                    item.ConnectionId = id;
+                }
+                Clients.All.gerarListagem(ConnectedUsers);
             }
             else
             {
@@ -72,7 +87,7 @@ namespace TreinamentoAspNet02.Chat
             if (Context.User.Identity.IsAuthenticated)
             {
                 await Groups.Add(Context.ConnectionId, roomName);
-                await Clients.Group(roomName).addNewNotificationToPage(nameUser + " entrou na sala.");
+                await Clients.Client(Context.ConnectionId).aviso();
             }
             else
             {
@@ -113,6 +128,7 @@ namespace TreinamentoAspNet02.Chat
                 var item = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
                 if (item != null)
                 {
+
                     ConnectedUsers.Remove(item);
 
                     Clients.All.gerarListagem(ConnectedUsers);
@@ -134,9 +150,20 @@ namespace TreinamentoAspNet02.Chat
                     if (atendimento != null)
                     {
                         atendimento.Encerrado = true;
-                        db.SaveChanges();
                     }
 
+                    var consultor = db.AspNetUsers.Find(atendimento.Id_Consultor);
+                    if (consultor != null)
+                    {
+                        consultor.Ocupado = true;
+                        var itemConsultor = ConnectedUsers.FirstOrDefault(x => x.UserName == consultor.UserName);
+                        if (itemConsultor != null)
+                        {
+                            //Clients.Client(itemConsultor.ConnectionId)
+                        }
+                    }
+
+                    db.SaveChanges();
                     ConnectedVisitantes.Remove(item);
                 }
             }
