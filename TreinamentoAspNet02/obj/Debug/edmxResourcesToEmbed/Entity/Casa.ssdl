@@ -66,13 +66,26 @@
     <Property Name="AutoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Ocupado" Type="bit" Nullable="false" />
   </EntityType>
-  <EntityType Name="ConnectedUsers">
+  <EntityType Name="Atendimentos">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
-    <Property Name="Id" Type="varchar" MaxLength="128" Nullable="false" />
-    <Property Name="Nome" Type="varchar(max)" />
-    <Property Name="ConnectionId" Type="varchar" MaxLength="128" />
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Id_Consultor" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="Id_Visitante" Type="int" />
+    <Property Name="Data" Type="date" />
+    <Property Name="Encerrado" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Mensagens">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Mensagem" Type="varchar" MaxLength="255" />
+    <Property Name="Arquivo" Type="varchar(max)" />
+    <Property Name="enviadoPorConsultor" Type="nvarchar" MaxLength="128" />
+    <Property Name="enviadoPorVisitante" Type="int" />
+    <Property Name="Id_Atendimento" Type="int" />
   </EntityType>
   <EntityType Name="Visitante">
     <Key>
@@ -82,17 +95,28 @@
     <Property Name="Nome" Type="varchar(max)" />
     <Property Name="Email" Type="varchar(max)" />
     <Property Name="Celular" Type="varchar(max)" />
-    <Property Name="Id_Consultor" Type="nvarchar" MaxLength="128" />
   </EntityType>
-  <Association Name="FK_Consultores_Visitantes">
-    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
-    <End Role="Visitante" Type="Self.Visitante" Multiplicity="*" />
+  <Association Name="FK_Atendimentos_Consultor">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+    <End Role="Atendimentos" Type="Self.Atendimentos" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="AspNetUsers">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="Visitante">
+      <Dependent Role="Atendimentos">
         <PropertyRef Name="Id_Consultor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Atendimentos_Visitante">
+    <End Role="Visitante" Type="Self.Visitante" Multiplicity="0..1" />
+    <End Role="Atendimentos" Type="Self.Atendimentos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Visitante">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Atendimentos">
+        <PropertyRef Name="Id_Visitante" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -152,6 +176,49 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Mensagens_Atendimento">
+    <End Role="Atendimentos" Type="Self.Atendimentos" Multiplicity="0..1" />
+    <End Role="Mensagens" Type="Self.Mensagens" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Atendimentos">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Mensagens">
+        <PropertyRef Name="Id_Atendimento" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+  <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <EntityContainer Name="sistema_atendimentoModelStoreContainer">
     <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
@@ -159,11 +226,16 @@
     <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="ConnectedUsers" EntityType="Self.ConnectedUsers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Atendimentos" EntityType="Self.Atendimentos" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Mensagens" EntityType="Self.Mensagens" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Visitante" EntityType="Self.Visitante" Schema="dbo" store:Type="Tables" />
-    <AssociationSet Name="FK_Consultores_Visitantes" Association="Self.FK_Consultores_Visitantes">
+    <AssociationSet Name="FK_Atendimentos_Consultor" Association="Self.FK_Atendimentos_Consultor">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="Atendimentos" EntitySet="Atendimentos" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Atendimentos_Visitante" Association="Self.FK_Atendimentos_Visitante">
       <End Role="Visitante" EntitySet="Visitante" />
+      <End Role="Atendimentos" EntitySet="Atendimentos" />
     </AssociationSet>
     <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -180,6 +252,10 @@
     <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Mensagens_Atendimento" Association="Self.FK_Mensagens_Atendimento">
+      <End Role="Atendimentos" EntitySet="Atendimentos" />
+      <End Role="Mensagens" EntitySet="Mensagens" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

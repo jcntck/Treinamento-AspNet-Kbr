@@ -26,23 +26,30 @@
             chat.client.statusConsultor = function (idConsultor, status) {
                 if (status) {
                     console.log(`Consultor Id[${idConsultor}] está ocupado.`)
-                    $(".pStatus").each(function () {
-                        if ($(this).attr("id") == "status_" + idConsultor) {
-                            $(this).removeClass("label-success");
-                            $(this).addClass("label-danger");
-                            $(this).html("Ocupado");
+
+                    $(".cardConsultor").each(function () {
+                        if ($(this).attr("id") == `div_${idConsultor}`) {
+                            var pStatus = $(this).find(".pStatus");
+                            pStatus.removeClass("label-success");
+                            pStatus.addClass("label-danger");
+                            pStatus.html("Ocupado");
+
+                            $(this).find("a").remove();
                         }
-                    })
+                    });
                 } else {
                     console.log(`Consultor Id[${idConsultor}] está disponivel.`)
-                    $(".pStatus").each(function () {
-                        if ($(this).attr("id") == "status_" + idConsultor) {
-                            $(this).removeClass("label-danger");
-                            $(this).addClass("label-success");
-                            $(this).html("Disponível");
+                    $(".cardConsultor").each(function () {
+                        if ($(this).attr("id") == `div_${idConsultor}`) {
+                            var pStatus = $(this).find(".pStatus");
+                            pStatus.removeClass("label-danger");
+                            pStatus.addClass("label-success");
+                            pStatus.html("Disponível");
+
+                            $(this).append(criarLinkFicha(idConsultor));
                         }
-                    }
-                )}
+                    });
+                }
             }
 
             $.connection.hub.start().done(function () {
@@ -64,6 +71,7 @@
                         for (i = 0; i < data.length; i++) {
                             var div = $("<div />", {
                                 class: "col-md-3 cardConsultor",
+                                id: `div_${data[i].Id}`,
                                 style: "min-height: 200px; margin: 10px 10px 10px 0; padding: 20px;"
                             });
 
@@ -75,7 +83,6 @@
 
                             var status = $("<p />", {
                                 class: (data[i].Ocupado ? "label label-danger" : "label label-success") + " text-uppercase pStatus",
-                                id: "status_" + data[i].Id,
                                 style: "font-size: 1em;"
                             }).html((data[i].Ocupado ? "Ocupado" : "Disponível"))
 
@@ -95,6 +102,11 @@
                             div.append(divFoto);
                             div.append(nome);
 
+                            if (!data[i].Ocupado) {
+                                var linkFicha = criarLinkFicha(data[i].Id);
+                                div.append(linkFicha);
+                            }
+
                             listagem.append(div);
 
                         }
@@ -107,5 +119,15 @@
 
             }
         })
+
+        function criarLinkFicha(idConsultor) {
+            return $("<a />", {
+                href: `/Visitante/Create?consultorId=${idConsultor}`,
+                title: "Iníciar atendimento com este consultor",
+                class: "btn btn-lg btn-default btnFicha",
+                style: "margin-top: 10px"
+            }).html("Solicitar atendimento");
+        }
+
     </script>
 }

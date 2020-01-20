@@ -1,7 +1,46 @@
-﻿
+﻿@model IEnumerable<TreinamentoAspNet02.Areas.Admin.Models.AtendimentosViewModel>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Histórico de atendimentos";
 }
 
-<h2>Atendimentos efetuados</h2>
+@if (!string.IsNullOrEmpty(ViewBag.StatusMessage))
+{
+    <div class="alert alert-success" role="alert">
+        <p class="text-success">@ViewBag.StatusMessage</p>
+    </div>
+}
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading" style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>@ViewBag.Title</h2>
+    </div>
 
+    <div style="padding: 10px;">
+        <!-- Table -->
+        <table id="atendimentos" class="table">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>Consultor</td>
+                    <td>Cliente</td>
+                    <td>Data do Atendimento</td>
+                    <td><i class="glyphicon glyphicon-search" title="Mais detalhes"></i></td>
+                </tr>
+            </thead>
+            @foreach (var atendimento in Model)
+            {
+                <tr>
+                    <th>@atendimento.Id</th>
+                    <td style="width:30%">@atendimento.NomeConsultor</td>
+                    <td style="width:30%">@atendimento.NomeCliente</td>
+                    <td>@atendimento.Data</td>
+                    <td style="width: 60px;">
+                        <a href="@Url.Action("Details","Atendimentos", new { id = atendimento.Id })" title="Mais detalhes">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

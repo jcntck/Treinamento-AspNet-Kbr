@@ -72,7 +72,6 @@
     <EntitySetMapping Name="Visitante">
       <EntityTypeMapping TypeName="sistema_atendimentoModel.Visitante">
         <MappingFragment StoreEntitySet="Visitante">
-          <ScalarProperty Name="Id_Consultor" ColumnName="Id_Consultor" />
           <ScalarProperty Name="Celular" ColumnName="Celular" />
           <ScalarProperty Name="Email" ColumnName="Email" />
           <ScalarProperty Name="Nome" ColumnName="Nome" />
@@ -80,14 +79,52 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="ConnectedUsers">
-      <EntityTypeMapping TypeName="sistema_atendimentoModel.ConnectedUsers">
-        <MappingFragment StoreEntitySet="ConnectedUsers">
-          <ScalarProperty Name="ConnectionId" ColumnName="ConnectionId" />
-          <ScalarProperty Name="Nome" ColumnName="Nome" />
+    <EntitySetMapping Name="Atendimentos">
+      <EntityTypeMapping TypeName="sistema_atendimentoModel.Atendimentos">
+        <MappingFragment StoreEntitySet="Atendimentos">
+          <ScalarProperty Name="Data" ColumnName="Data" />
+          <ScalarProperty Name="Encerrado" ColumnName="Encerrado" />
+          <ScalarProperty Name="Id_Visitante" ColumnName="Id_Visitante" />
+          <ScalarProperty Name="Id_Consultor" ColumnName="Id_Consultor" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Mensagens">
+      <EntityTypeMapping TypeName="sistema_atendimentoModel.Mensagens">
+        <MappingFragment StoreEntitySet="Mensagens">
+          <ScalarProperty Name="enviadoPorVisitante" ColumnName="enviadoPorVisitante" />
+          <ScalarProperty Name="enviadoPorConsultor" ColumnName="enviadoPorConsultor" />
+          <ScalarProperty Name="Id_Atendimento" ColumnName="Id_Atendimento" />
+          <ScalarProperty Name="Arquivo" ColumnName="Arquivo" />
+          <ScalarProperty Name="Mensagem" ColumnName="Mensagem" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="sistema_atendimentoModel.Store.sp_alterdiagram" />
+    <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="sistema_atendimentoModel.Store.sp_creatediagram" />
+    <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="sistema_atendimentoModel.Store.sp_dropdiagram" />
+    <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="sistema_atendimentoModel.Store.sp_helpdiagramdefinition">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="sistema_atendimentoModel.sp_helpdiagramdefinition_Result">
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="definition" ColumnName="definition" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="sistema_atendimentoModel.Store.sp_helpdiagrams">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="sistema_atendimentoModel.sp_helpdiagrams_Result">
+          <ScalarProperty Name="Database" ColumnName="Database" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Owner" ColumnName="Owner" />
+          <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="sistema_atendimentoModel.Store.sp_renamediagram" />
+    <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="sistema_atendimentoModel.Store.sp_upgraddiagrams" />
   </EntityContainerMapping>
 </Mapping>

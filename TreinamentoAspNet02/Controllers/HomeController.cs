@@ -26,10 +26,22 @@ namespace TreinamentoAspNet02.Controllers
             return View();
         }
 
-        public ActionResult Chat(string id)
+        public ActionResult Chat(int id)
         {
-            var user = db.AspNetUsers.Find(id);
-            return View(user);
+            var atendimentoAtual = db.Atendimentos.Find(id);
+            var consultor = db.AspNetUsers.Find(atendimentoAtual.Id_Consultor);
+
+            if (atendimentoAtual != null && !atendimentoAtual.Encerrado && !consultor.Ocupado)
+            {
+                var model = new AtendimentoViewModel
+                {
+                    AtendimentoAtual = atendimentoAtual,
+                    Consultor = consultor,
+                    Visitante = db.Visitante.Find(atendimentoAtual.Id_Visitante)
+                };
+                return View(model);
+            }
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -37,7 +49,7 @@ namespace TreinamentoAspNet02.Controllers
         {
             List<Consultores> consultores = new List<Consultores>();
             foreach (UserDetail connectedUser in connectedUsers)
-            { 
+            {
                 var user = db.AspNetUsers.FirstOrDefault(u => u.UserName == connectedUser.UserName);
                 consultores.Add(new Consultores
                 {

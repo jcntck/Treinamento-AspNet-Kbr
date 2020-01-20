@@ -4,8 +4,26 @@ create table dbo.Visitante
 	Nome varchar(MAX),
 	Email varchar(MAX),
 	Celular varchar(MAX),
-	Id_Consultor nvarchar(128),
-	CONSTRAINT PK_Visitantes PRIMARY KEY (Id),
-	CONSTRAINT FK_Consultores_Visitantes FOREIGN KEY (Id_Consultor)
-	REFERENCES dbo.AspNetUsers (Id)
+	CONSTRAINT PK_Visitantes PRIMARY KEY (Id)
+);
+
+create table dbo.Atendimentos
+(
+	Id int identity not null, 
+	Id_Consultor nvarchar(128) not null,
+	Id_Visitante int,
+	CONSTRAINT PK_Atendimentos PRIMARY KEY (Id),
+	CONSTRAINT FK_Atendimentos_Consultor foreign key (Id_Consultor) references AspNetUsers(Id),
+	constraint FK_Atendimentos_Visitante foreign key (Id_Visitante) references Visitante(Id) 
+);
+
+create table dbo.Mensagens
+(
+	Id int identity not null,
+	Mensagem varchar(255),
+	Arquivo varchar(max),
+	enviadoPor bit,
+	Id_Atendimento int,
+	CONSTRAINT PK_Mensagens PRIMARY KEY (Id),
+	CONSTRAINT FK_Mensagens_Atendimento FOREIGN KEY (Id_Atendimento) references Atendimentos(Id)
 );

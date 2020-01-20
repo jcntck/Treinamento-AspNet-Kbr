@@ -63,13 +63,15 @@
     <script>
         $(function () {
             var chat = $.connection.chatHub;
-            
+            var idAtendimento = null;
+
             chat.client.addNewMessageToPage = function (name, message) {
                 $('#mensagens').append('<li><strong>' + htmlEncode(name) + '</strong>: ' + htmlEncode(message) + '</li>');
             };
 
-            chat.client.addNewNotificationToPage = function (name) {
-                $('#mensagens').append('<p class="text-info"><strong>' + htmlEncode(name) + '</strong></p>');
+            chat.client.novoAtendimento = function (id, name) {
+                idAtendimento = id;
+                $('#mensagens').append('<p class="text-info"><strong>' + htmlEncode(name) + '</strong> iniciou um novo atendimento com você. <em>Atendimento #' + id + '</em></p>');
             };
 
             $('#message').focus();
@@ -84,7 +86,7 @@
                 var nomeConsultor = $('#nomeConsultor').val();
 
                 getStatus();
-                chat.server.connect("@User.Identity.Name");
+                chat.server.connect("@User.Identity.Name", true, 0);
                 chat.server.joinRoom(idConsultor, nomeConsultor);
 
                 $("#ckStatus").click(function () {
@@ -101,6 +103,7 @@
 
                 $('#send').click(function () {
                     chat.server.send(nomeConsultor, $('#message').val(), idConsultor);
+                    chat.server.storeMessage($('#message').val(), idConsultor, 0, idAtendimento);
 
                     $('#message').val('').focus();
                     var target = $('#mensagens');

@@ -1,4 +1,4 @@
-﻿@model TreinamentoAspNet02.Entity.AspNetUsers
+﻿@model TreinamentoAspNet02.Models.AtendimentoViewModel
 @{
     ViewBag.Title = "Chat";
 }
@@ -7,13 +7,15 @@
 
 <link href="~/Content/sweetalert.css" rel="stylesheet" />
 
-<p>Você está falando com: <strong>@Model.Nome</strong></p>
+<p>Você está falando com: <strong>@Model.Consultor.Nome</strong></p>
 
-<input type="hidden" id="connId"  value="@Model.Id"/>
+<input type="hidden" id="connId" value="@Model.Consultor.Id" />
+<input type="hidden" id="idAtendimento" value="@Model.AtendimentoAtual.Id" />
 <div class="form-group col-xl-12">
 
     <label class="control-label">Seu nome: </label>
-    <input type="text" class="col-lg-12 text-primary" id="nomeVisitante" /> <br />
+    <input type="hidden" id="idVisitante" value="@Model.Visitante.Id" />
+    <input type="text" class="col-lg-12 text-primary" id="nomeVisitante" value="@Model.Visitante.Nome" readonly /> <br />
 
     <label class="control-label">Your Message</label><br />
     <input type="text" id="message" class="col-lg-10 text-primary" />&nbsp;&nbsp;&nbsp;&nbsp;
@@ -49,11 +51,13 @@
             });
 
             $.connection.hub.start().done(function () {
+                chat.server.connect("Visitante", false, $("#idAtendimento").val());
                 chat.server.joinRoom($('#connId').val(), $('#nomeVisitante').val());
 
                 $('#sendmessage').click(function () {
 
                     chat.server.send($('#nomeVisitante').val(), $('#message').val(), $('#connId').val());
+                    chat.server.storeMessage($('#message').val(), null, $("#idVisitante").val() , $("#idAtendimento").val());
                     $('#message').val('').focus();
 
                 });

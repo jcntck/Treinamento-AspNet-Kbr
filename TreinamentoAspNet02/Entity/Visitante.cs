@@ -14,12 +14,18 @@ namespace TreinamentoAspNet02.Entity
     
     public partial class Visitante
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Visitante()
+        {
+            this.Atendimentos = new HashSet<Atendimentos>();
+        }
+    
         public int Id { get; set; }
         public string Nome { get; set; }
         public string Email { get; set; }
         public string Celular { get; set; }
-        public string Id_Consultor { get; set; }
     
-        public virtual AspNetUsers AspNetUsers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Atendimentos> Atendimentos { get; set; }
     }
 }

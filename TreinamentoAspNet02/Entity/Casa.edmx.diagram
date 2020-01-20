@@ -14,8 +14,11 @@
         <AssociationConnector Association="sistema_atendimentoModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
         <AssociationConnector Association="sistema_atendimentoModel.AspNetUserRoles" ManuallyRouted="false" />
         <EntityTypeShape EntityType="sistema_atendimentoModel.Visitante" Width="1.5" PointX="5.25" PointY="7.375" />
-        <AssociationConnector Association="sistema_atendimentoModel.FK_Consultores_Visitantes" />
-        <EntityTypeShape EntityType="sistema_atendimentoModel.ConnectedUsers" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="sistema_atendimentoModel.Atendimentos" Width="1.5" PointX="7.5" PointY="4.25" />
+        <EntityTypeShape EntityType="sistema_atendimentoModel.Mensagens" Width="1.5" PointX="9.75" PointY="4.25" />
+        <AssociationConnector Association="sistema_atendimentoModel.FK_Atendimentos_Consultor" />
+        <AssociationConnector Association="sistema_atendimentoModel.FK_Atendimentos_Visitante" />
+        <AssociationConnector Association="sistema_atendimentoModel.FK_Mensagens_Atendimento" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

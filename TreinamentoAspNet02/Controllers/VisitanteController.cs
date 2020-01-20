@@ -37,17 +37,32 @@ namespace TreinamentoAspNet02.Controllers
                 {
                     Nome = model.Nome,
                     Email = model.Email,
-                    Celular = model.Celular,
-                    Id_Consultor = model.IdConsultor
+                    Celular = model.Celular
                 };
 
                 db.Visitante.Add(visitante);
                 db.SaveChanges();
-                int id = visitante.Id;
-                return RedirectToAction("Chat", "Home", new { id = model.IdConsultor });
+
+                int idAtendimento = CriarNovoAtendimento(visitante.Id, model.IdConsultor);
+
+                return RedirectToAction("Chat", "Home", new { id = idAtendimento });
             }
             // Se chegamos até aqui e houver alguma falha, exiba novamente o formulário
-            return View(model);
+            return RedirectToAction("Create", "Visitante", new { consultorId = model.IdConsultor });
+        }
+
+        public int CriarNovoAtendimento(int idVisitante, string idConsultor)
+        {
+            var atendimento = new Entity.Atendimentos
+            {
+                Id_Visitante = idVisitante,
+                Id_Consultor = idConsultor,
+                Data = DateTime.Now,
+            };
+
+            db.Atendimentos.Add(atendimento);
+            db.SaveChanges();
+            return atendimento.Id;
         }
     }
 }
