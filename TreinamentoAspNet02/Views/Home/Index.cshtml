@@ -14,6 +14,7 @@
         $(function () {
 
             var chat = $.connection.chatHub;
+            var isConsultor = ("@User.Identity.IsAuthenticated" == "True")
 
             chat.client.gerarListagem = function (connectedUsers) {
                 if (connectedUsers.length > 0) {
@@ -46,7 +47,7 @@
                             pStatus.addClass("label-success");
                             pStatus.html("Disponível");
 
-                            $(this).append(criarLinkFicha(idConsultor));
+                            if (!isConsultor) $(this).append(criarLinkFicha(idConsultor));
                         }
                     });
                 }
@@ -68,6 +69,7 @@
                         console.log(data)
                         var listagem = $("#listagem");
                         listagem.empty();
+                        if ($("#aviso").length > 0) $("#aviso").remove(); 
                         for (i = 0; i < data.length; i++) {
                             var div = $("<div />", {
                                 class: "col-md-3 cardConsultor",
@@ -102,9 +104,18 @@
                             div.append(divFoto);
                             div.append(nome);
 
-                            if (!data[i].Ocupado) {
-                                var linkFicha = criarLinkFicha(data[i].Id);
-                                div.append(linkFicha);
+                            if (!isConsultor) {
+                                if (!data[i].Ocupado) {
+                                    var linkFicha = criarLinkFicha(data[i].Id);
+                                    div.append(linkFicha);
+                                }
+                            } else {
+                                var aviso = $("<div />", {
+                                    class: "alert alert-danger",
+                                    role: "alert",
+                                    id: 'aviso'
+                                }).html("Você como consultor não pode solicitar atendimentos.");
+                                listagem.append(aviso)
                             }
 
                             listagem.append(div);

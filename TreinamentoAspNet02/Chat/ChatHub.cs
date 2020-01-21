@@ -23,11 +23,6 @@ namespace TreinamentoAspNet02.Chat
             Clients.Group(group).addNewMessageToPage(name, message);
         }
 
-        public void Notification(string name, string message, string group)
-        {
-            Clients.Group(group).addNewNotificationToPage(name);
-        }
-
         public void Status(string idConsultor, bool status)
         {
             Clients.All.statusConsultor(idConsultor, status);
@@ -60,7 +55,8 @@ namespace TreinamentoAspNet02.Chat
                 var item = ConnectedUsers.FirstOrDefault(x => x.UserName == Context.User.Identity.Name);
                 if (item == null)
                 {
-                    ConnectedUsers.Add(new UserDetail { 
+                    ConnectedUsers.Add(new UserDetail
+                    {
                         ConnectionId = id,
                         UserName = userName,
                     });
@@ -81,15 +77,10 @@ namespace TreinamentoAspNet02.Chat
             }
         }
 
-        public async Task JoinRoom(string roomName, string nameUser)
+        public async Task JoinRoom(string roomName, string nameUser, bool isConsultor)
         {
             var item = GroupsControl.FirstOrDefault(x => x.Name == roomName);
-            if (Context.User.Identity.IsAuthenticated)
-            {
-                await Groups.Add(Context.ConnectionId, roomName);
-                await Clients.Client(Context.ConnectionId).aviso();
-            }
-            else
+            if (!isConsultor)
             {
                 var consultor = db.AspNetUsers.Find(roomName);
                 if (consultor != null)
@@ -101,13 +92,15 @@ namespace TreinamentoAspNet02.Chat
                     GroupsControl.Add(new GroupsDetail { Name = consultor.Id, ConnectionId = Context.ConnectionId });
                     Status(consultor.Id, true);
 
-                    await Groups.Add(Context.ConnectionId, roomName);
                     await Clients.Group(roomName).novoAtendimento(visitante.IdAtendimento, nameUser);
                 }
             }
+
+            await Clients.Client(Context.ConnectionId).aviso();
+            await Groups.Add(Context.ConnectionId, roomName);
         }
 
-        public void LeaveRoom(string roomName, string nameUser)
+        public void LeaveRoom(string roomName)
         {
             var consultor = db.AspNetUsers.Find(roomName);
             if (consultor != null)
@@ -117,7 +110,6 @@ namespace TreinamentoAspNet02.Chat
                 Status(consultor.Id, false);
 
                 Groups.Remove(Context.ConnectionId, roomName);
-                Clients.Group(roomName).addNewNotificationToPage(nameUser + " deixou a sala");
             }
         }
 
@@ -128,46 +120,14 @@ namespace TreinamentoAspNet02.Chat
                 var item = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
                 if (item != null)
                 {
-
                     ConnectedUsers.Remove(item);
 
                     Clients.All.gerarListagem(ConnectedUsers);
                 }
             }
-            else
-            {
-                var group = GroupsControl.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
-                if (group != null)
-                {
-                    LeaveRoom(group.Name, "Visitante");
-                    GroupsControl.Remove(group);
-                }
 
-                var item = ConnectedVisitantes.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
-                if (item != null)
-                {
-                    var atendimento = db.Atendimentos.Find(item.IdAtendimento);
-                    if (atendimento != null)
-                    {
-                        atendimento.Encerrado = true;
-                    }
-
-                    var consultor = db.AspNetUsers.Find(atendimento.Id_Consultor);
-                    if (consultor != null)
-                    {
-                        consultor.Ocupado = true;
-                        var itemConsultor = ConnectedUsers.FirstOrDefault(x => x.UserName == consultor.UserName);
-                        if (itemConsultor != null)
-                        {
-                            //Clients.Client(itemConsultor.ConnectionId)
-                        }
-                    }
-
-                    db.SaveChanges();
-                    ConnectedVisitantes.Remove(item);
-                }
-            }
-
+            var isVisitante = ConnectedVisitantes.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
+            if (isVisitante != null) Desconectar();
 
             return base.OnDisconnected(stopCalled);
         }
@@ -177,6 +137,40 @@ namespace TreinamentoAspNet02.Chat
         {
             Clients.All.gerarListagem(ConnectedUsers);
         }
-        #endregion
+
+        public void Desconectar()
+        {
+            var group = GroupsControl.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
+            if (group != null)
+            {
+                LeaveRoom(group.Name);
+                GroupsControl.Remove(group);
+            }
+
+            var item = ConnectedVisitantes.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
+            if (item != null)
+            {
+                var atendimento = db.Atendimentos.Find(item.IdAtendimento);
+                if (atendimento != null)
+                {
+                    atendimento.Encerrado = true;
+                }
+
+                var consultor = db.AspNetUsers.Find(atendimento.Id_Consultor);
+                if (consultor != null)
+                {
+                    consultor.Ocupado = true;
+                    var itemConsultor = ConnectedUsers.FirstOrDefault(x => x.UserName == consultor.UserName);
+                    if (itemConsultor != null)
+                    {
+                        Clients.Client(itemConsultor.ConnectionId).atendimentoEncerrado(atendimento.Id);
+                    }
+                }
+
+                db.SaveChanges();
+                ConnectedVisitantes.Remove(item);
+            }
+            #endregion
+        }
     }
 }

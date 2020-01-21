@@ -77,6 +77,7 @@
     <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_Atendimentos_Consultor" FromRole="Atendimentos" ToRole="AspNetUsers" />
     <NavigationProperty Name="Visitante" Relationship="Self.FK_Atendimentos_Visitante" FromRole="Atendimentos" ToRole="Visitante" />
     <NavigationProperty Name="Mensagens" Relationship="Self.FK_Mensagens_Atendimento" FromRole="Atendimentos" ToRole="Mensagens" />
+    <Property Name="Duracao" Type="Int32" />
   </EntityType>
   <EntityType Name="Mensagens">
     <Key>

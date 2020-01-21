@@ -1,29 +1,46 @@
 ﻿@model TreinamentoAspNet02.Models.AtendimentoViewModel
 @{
-    ViewBag.Title = "Chat";
+    ViewBag.Title = "Atendimento n°" + Model.AtendimentoAtual.Id;
 }
-
-<h2>Chat</h2>
-
+<link href="~/Content/Chat.css" rel="stylesheet" />
 <link href="~/Content/sweetalert.css" rel="stylesheet" />
 
-<p>Você está falando com: <strong>@Model.Consultor.Nome</strong></p>
+<div class="panel panel-default">
+    <div class="panel-heading flex">
+        <h2>@ViewBag.Title</h2>
+    </div>
+    <div class="panel-body">
+        <p>Você está falando com: </p>
+        <h3>@Model.Consultor.Nome</h3>
+    </div>
+</div>
 
-<input type="hidden" id="connId" value="@Model.Consultor.Id" />
+@* Informações necessárias *@
 <input type="hidden" id="idAtendimento" value="@Model.AtendimentoAtual.Id" />
-<div class="form-group col-xl-12">
+<input type="hidden" id="idConsultor" value="@Model.Consultor.Id" />
+<input type="hidden" id="idVisitante" value="@Model.Visitante.Id" />
+<input type="hidden" id="nomeVisitante" value="@Model.Visitante.Nome" />
+<input type="hidden" id="duracao" value="@Model.AtendimentoAtual.Duracao" />
 
-    <label class="control-label">Seu nome: </label>
-    <input type="hidden" id="idVisitante" value="@Model.Visitante.Id" />
-    <input type="text" class="col-lg-12 text-primary" id="nomeVisitante" value="@Model.Visitante.Nome" readonly /> <br />
+@* provisório *@
+<span>* Temporário *</span>
+<button class="btn btn-default" id="desconectar">Desconectar</button>
 
-    <label class="control-label">Your Message</label><br />
-    <input type="text" id="message" class="col-lg-10 text-primary" />&nbsp;&nbsp;&nbsp;&nbsp;
-    <input type="button" class="btn btn-primary" id="sendmessage" value="Send" /><br /><br>
+<div class="well well-lg bg-consultor">
+    <div id="numberCountdown" class="flex-duracao"></div>
+    <div id="areaChat">
+        @* Disponível *@
+        <div id="areaDisponivel">
+            <div class="well well-lg bg-mensagens flex-column-reverse">
+                <div id="avisos"></div>
+                <div id="mensagens" style="overflow-y: scroll"></div>
+            </div>
 
-    <div class="container chatArea">
-        <input type="hidden" id="displayname" />
-        <ul id="discussion"></ul>
+            <div class="flex">
+                <input type="text" class="col-lg-10 input-message" id="message">
+                <input type="button" class="btn btn-default" id="send" value="Enviar" />
+            </div>
+        </div>
     </div>
 </div>
 
@@ -34,14 +51,31 @@
     <script>
         $(function () {
             var chat = $.connection.chatHub;
+            var idAtendimento = $("#idAtendimento").val();
+            var idConsultor = $("#idConsultor").val();
+            var idVisitante = $("#idVisitante").val();
+            var nomeVisitante = $("#nomeVisitante").val();
 
-            chat.client.addNewMessageToPage = function (name, message) {
-                $('#discussion').append('<li><strong>' + htmlEncode(name) + '</strong>: ' + htmlEncode(message) + '</li>');
-            };
+            clientsMethods(chat);
+            startCountdown();
 
-            chat.client.addNewNotificationToPage = function (name) {
-                $('#discussion').append('<p class="text-info"><strong>' + htmlEncode(name) + '</strong></p>');
-            };
+            $.connection.hub.start().done(function () {
+
+                chat.server.connect("Visitante", false, $("#idAtendimento").val());
+                chat.server.joinRoom(idConsultor, nomeVisitante, false);
+
+                $('#sendmessage').click(function () {
+                    chat.server.send(nomeVisitante, $('#message').val(), idConsultor);
+                    chat.server.storeMessage($('#message').val(), null, idVisitante, idAtendimento);
+                    $('#message').val('').focus();
+                });
+
+                $("#desconectar").click(function () {
+                    chat.server.desconectar()
+                    window.location.replace("/")
+                });
+
+            });
 
             $('#message').focus();
             $('#message').keypress(function (e) {
@@ -50,26 +84,51 @@
                 }
             });
 
-            $.connection.hub.start().done(function () {
-                chat.server.connect("Visitante", false, $("#idAtendimento").val());
-                chat.server.joinRoom($('#connId').val(), $('#nomeVisitante').val());
-
-                $('#sendmessage').click(function () {
-
-                    chat.server.send($('#nomeVisitante').val(), $('#message').val(), $('#connId').val());
-                    chat.server.storeMessage($('#message').val(), null, $("#idVisitante").val() , $("#idAtendimento").val());
-                    $('#message').val('').focus();
-
-                });
-
-            });
-
         });
 
         // This optional function html-encodes messages for display in the page.
         function htmlEncode(value) {
             var encodedValue = $('<div />').text(value).html();
             return encodedValue;
+        }
+
+        function clientsMethods(chat) {
+
+            // Adicionar mensagens para o client
+            chat.client.addNewMessageToPage = function (name, message) {
+                $('#discussion').append('<li><strong>' + htmlEncode(name) + '</strong>: ' + htmlEncode(message) + '</li>');
+            };
+
+            // Aviso quando visitante entrar na sala.
+            chat.client.aviso = function () {
+                $("#avisos").empty();
+                var aviso = $("<div />", {
+                    class: "alert alert-warning",
+                    role: "alert"
+                }).html("Atendimento iníciado, quando o tempo se esgotar você será automaticamente retirado no chat. <strong>AVISO:</strong> caso você saia ou desconecte o atendimento será encerrado.");
+                $("#avisos").append(aviso);
+            }
+
+        }
+
+        // temporário
+
+        var g_iCount = new Number();
+
+        // de 30 a 0 //
+        var g_iCount = parseInt($("#duracao").val()) * 60;
+
+        function startCountdown() {
+            if ((g_iCount - 1) >= 0) {
+                g_iCount = g_iCount - 1;
+
+                dateObj = new Date(g_iCount * 1000);
+                minutes = dateObj.getUTCMinutes();
+                seconds = dateObj.getSeconds();
+
+                numberCountdown.innerText = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+                setTimeout('startCountdown()', 1000);
+            }
         }
     </script>
 }

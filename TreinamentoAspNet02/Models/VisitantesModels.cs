@@ -11,5 +11,11 @@ namespace TreinamentoAspNet02.Models
         public string Email { get; set; }
         public string Celular { get; set; }
         public string Id_Consultor { get; set; }
+        public int TempoAtendimento { get; set; }
+    }
+
+    public class TempoAtendimento
+    {
+        public int Duracao { get; set; }
     }
 }

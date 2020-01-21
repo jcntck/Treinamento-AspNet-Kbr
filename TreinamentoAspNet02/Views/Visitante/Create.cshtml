@@ -26,6 +26,17 @@
             @Html.LabelFor(m => m.Celular, new { @class = "control-label" })
             @Html.TextBoxFor(m => m.Celular, new { @class = "form-control" })
         </div>
+        @Html.LabelFor(m => m.TempoAtendimento, new { @class = "control-label" })
+        <div class="form-group">
+            @Html.RadioButtonFor(m => m.TempoAtendimento.Duracao, (int)2, new { @checked = true })
+            <text>2 min</text>
+            @Html.RadioButtonFor(m => m.TempoAtendimento.Duracao, (int)5)
+            <text>5 min</text>
+            @Html.RadioButtonFor(m => m.TempoAtendimento.Duracao, (int)30)
+            <text>30 min</text>
+            @Html.RadioButtonFor(m => m.TempoAtendimento.Duracao, (int)60)
+            <text>1 h</text>
+        </div>
         <input type="hidden" name="IdConsultor" value="@ViewBag.IdConsultor" />
         <div class="form-group">
             <input type="submit" class="btn btn-default" value="Cadastrar" />

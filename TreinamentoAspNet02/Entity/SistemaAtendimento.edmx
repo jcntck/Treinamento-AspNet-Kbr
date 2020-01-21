@@ -80,6 +80,7 @@
           <Property Name="Id_Visitante" Type="int" />
           <Property Name="Encerrado" Type="bit" Nullable="false" />
           <Property Name="Data" Type="datetime" />
+          <Property Name="Duracao" Type="int" />
         </EntityType>
         <EntityType Name="Mensagens">
           <Key>
@@ -324,6 +325,7 @@
           <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_Atendimentos_Consultor" FromRole="Atendimentos" ToRole="AspNetUsers" />
           <NavigationProperty Name="Visitante" Relationship="Self.FK_Atendimentos_Visitante" FromRole="Atendimentos" ToRole="Visitante" />
           <NavigationProperty Name="Mensagens" Relationship="Self.FK_Mensagens_Atendimento" FromRole="Atendimentos" ToRole="Mensagens" />
+          <Property Name="Duracao" Type="Int32" />
         </EntityType>
         <EntityType Name="Mensagens">
           <Key>
@@ -529,6 +531,7 @@
           <EntitySetMapping Name="Atendimentos">
             <EntityTypeMapping TypeName="sistema_atendimentoModel1.Atendimentos">
               <MappingFragment StoreEntitySet="Atendimentos">
+                <ScalarProperty Name="Duracao" ColumnName="Duracao" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Id_Consultor" ColumnName="Id_Consultor" />
                 <ScalarProperty Name="Id_Visitante" ColumnName="Id_Visitante" />

@@ -64,6 +64,7 @@
     <EntitySetMapping Name="Atendimentos">
       <EntityTypeMapping TypeName="sistema_atendimentoModel1.Atendimentos">
         <MappingFragment StoreEntitySet="Atendimentos">
+          <ScalarProperty Name="Duracao" ColumnName="Duracao" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Id_Consultor" ColumnName="Id_Consultor" />
           <ScalarProperty Name="Id_Visitante" ColumnName="Id_Visitante" />

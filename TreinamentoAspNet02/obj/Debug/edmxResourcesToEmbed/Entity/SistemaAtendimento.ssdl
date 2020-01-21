@@ -75,6 +75,7 @@
     <Property Name="Id_Visitante" Type="int" />
     <Property Name="Encerrado" Type="bit" Nullable="false" />
     <Property Name="Data" Type="datetime" />
+    <Property Name="Duracao" Type="int" />
   </EntityType>
   <EntityType Name="Mensagens">
     <Key>
