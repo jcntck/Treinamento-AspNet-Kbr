@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\KBRTEC - 03\Desktop\Treinamento-AspNet-Kbr\TreinamentoAspNet02\Entity\SistemaAtendimento.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\João\Desktop\KBRTec\treinamento_aspNet02\TreinamentoAspNet02\Entity\SistemaAtendimento.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.
