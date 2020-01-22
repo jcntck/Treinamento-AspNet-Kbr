@@ -26,6 +26,9 @@ namespace TreinamentoAspNet02.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+
+
+
         // POST: Visitante/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -43,7 +46,7 @@ namespace TreinamentoAspNet02.Controllers
                 db.Visitante.Add(visitante);
                 db.SaveChanges();
 
-                int idAtendimento = CriarNovoAtendimento(visitante.Id, model.IdConsultor);
+                int idAtendimento = CriarNovoAtendimento(visitante.Id, model.IdConsultor, model.TempoAtendimento.Duracao);
 
                 return RedirectToAction("Chat", "Home", new { id = idAtendimento });
             }
@@ -51,13 +54,14 @@ namespace TreinamentoAspNet02.Controllers
             return RedirectToAction("Create", "Visitante", new { consultorId = model.IdConsultor });
         }
 
-        public int CriarNovoAtendimento(int idVisitante, string idConsultor)
+        public int CriarNovoAtendimento(int idVisitante, string idConsultor, int duracao)
         {
             var atendimento = new Entity.Atendimentos
             {
                 Id_Visitante = idVisitante,
                 Id_Consultor = idConsultor,
                 Data = DateTime.Now,
+                Duracao = duracao
             };
 
             db.Atendimentos.Add(atendimento);

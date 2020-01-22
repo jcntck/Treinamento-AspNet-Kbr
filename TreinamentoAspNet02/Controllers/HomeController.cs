@@ -31,8 +31,8 @@ namespace TreinamentoAspNet02.Controllers
             var atendimentoAtual = db.Atendimentos.Find(id);
             var consultor = db.AspNetUsers.Find(atendimentoAtual.Id_Consultor);
 
-            if (atendimentoAtual != null && !atendimentoAtual.Encerrado && !consultor.Ocupado)
-            {
+            //if (atendimentoAtual != null && !atendimentoAtual.Encerrado && !consultor.Ocupado)
+            //{
                 var model = new AtendimentoViewModel
                 {
                     AtendimentoAtual = atendimentoAtual,
@@ -40,8 +40,8 @@ namespace TreinamentoAspNet02.Controllers
                     Visitante = db.Visitante.Find(atendimentoAtual.Id_Visitante)
                 };
                 return View(model);
-            }
-            return RedirectToAction("Index");
+            //}
+            //return RedirectToAction("Index");
         }
 
         [HttpPost]

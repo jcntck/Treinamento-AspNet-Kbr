@@ -184,6 +184,7 @@
     <Compile Include="Areas\Admin\Models\ConsultoresViewModels.cs" />
     <Compile Include="Areas\Consultor\ConsultorAreaRegistration.cs" />
     <Compile Include="Areas\Consultor\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Consultor\Models\HomeModels.cs" />
     <Compile Include="Chat\ChatHub.cs" />
     <Compile Include="Chat\HubDetails.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -264,6 +265,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Chat.css" />
     <Content Include="Content\Consultor.css" />
     <Content Include="Content\Login.css" />
     <Content Include="Content\Site.css" />
@@ -358,7 +360,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Consultor\Models\" />
     <Folder Include="Images\Perfil\" />
   </ItemGroup>
   <ItemGroup>

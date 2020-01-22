@@ -19,10 +19,16 @@ namespace TreinamentoAspNet02.Models
         [EmailAddress]
         [Display(Name = "E-mail")]
         public string Email { get; set; }
+
         [Required]
         [Phone]
         [Display(Name = "Celular")]
         public string Celular { get; set; }
+
+        [Required]
+        [Display(Name = "Duração do atendimento")]
+        public TempoAtendimento TempoAtendimento { get; set; }
+
         public string IdConsultor { get; set; }
     }
 
