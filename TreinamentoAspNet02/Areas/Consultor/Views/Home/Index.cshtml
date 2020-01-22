@@ -32,6 +32,7 @@
 
         @* Disponível *@
         <div class="hidden" id="areaDisponivel">
+            <div id="numberCountdown" class="flex-duracao"></div>
             <div class="well well-lg bg-mensagens flex-column-reverse">
                 <div id="avisos"></div>
                 <div id="mensagens" style="overflow-y: scroll"></div>
@@ -47,18 +48,6 @@
 
 <input type="hidden" class="col-lg-12 text-primary" id="idConsultor" value="@User.Identity.GetUserId()" readonly />
 <input type="hidden" id="nomeConsultor" value="@User.Identity.GetName()" />
-@*<div class="form-group col-xl-12">
-
-        <label class="control-label">Your Message</label><br />
-        <input type="text" class="col-lg-10 text-primary" id="message">&nbsp;&nbsp;&nbsp;&nbsp;
-
-        <input type="button" class="btn btn-primary" id="sendmessage" value="Send" /><br /><br />
-        <div class="container chatArea">
-            <input type="hidden" id="displayname" />
-            <ul id="discussion"></ul>
-        </div>
-    </div>
-    <br>*@
 
 @section scripts {
     <script src="~/Scripts/jquery.signalR-2.2.2.min.js"></script>
@@ -67,7 +56,59 @@
     <script>
         $(function () {
             var chat = $.connection.chatHub;
-            var idAtendimento = null;
+            var idAtendimento;
+            var idConsultor = $("#idConsultor").val();
+            var nomeConsultor = $("#nomeConsultor").val();
+
+            clientsMethods(chat);
+
+            $.connection.hub.start().done(function () {
+                getStatus();
+                chat.server.connect("@User.Identity.Name", true, 0);
+
+                $("#ckStatus").click(function () {
+                    if ($(this).is(":checked")) {
+                        trocarStatus();
+                        atualizarHTML("text-danger", "text-success", "Disponível", "#areaOcupado", "#areaDisponivel");
+                        chat.server.joinRoom(idConsultor, nomeConsultor, true);
+                        chat.server.status(idConsultor, false);
+                    } else {
+                        trocarStatus();
+                        atualizarHTML("text-success", "text-danger", "Ocupado", "#areaDisponivel", "#areaOcupado");
+                        chat.server.status(idConsultor, true);
+                    }
+                });
+
+                $('#send').click(function () {
+                    chat.server.send(nomeConsultor, $('#message').val(), idConsultor);
+                    chat.server.storeMessage($('#message').val(), idConsultor, 0, idAtendimento);
+
+                    $('#message').val('').focus();
+                    var target = $('#mensagens');
+                    target.animate({
+                        scrollTop: target.height()
+                    }, 500);
+                });
+
+            });
+
+            $('#message').focus();
+            $('#message').keypress(function (e) {
+                if (e.which == 13) {//Enter key pressed
+                    $('#send').trigger('click');//Trigger search button click event
+                }
+            });
+
+        });
+
+        // This optional function html-encodes messages for display in the page.
+        function htmlEncode(value) {
+            var encodedValue = $('<div />').text(value).html();
+            return encodedValue;
+        }
+
+        // Métodos do cliente
+        function clientsMethods(chat) {
 
             chat.client.aviso = function () {
                 $("#avisos").empty();
@@ -132,51 +173,14 @@
                 });
             };
 
-            $('#message').focus();
-            $('#message').keypress(function (e) {
-                if (e.which == 13) {//Enter key pressed
-                    $('#send').trigger('click');//Trigger search button click event
-                }
-            });
+            chat.client.timer = function (tempoRestante) {
 
-            $.connection.hub.start().done(function () {
-                var idConsultor = $('#idConsultor').val();
-                var nomeConsultor = $('#nomeConsultor').val();
+                dateObj = new Date(tempoRestante * 1000);
+                minutes = dateObj.getUTCMinutes();
+                seconds = dateObj.getSeconds();
 
-                getStatus();
-                chat.server.connect("@User.Identity.Name", true, 0);
-
-                $("#ckStatus").click(function () {
-                    if ($(this).is(":checked")) {
-                        trocarStatus();
-                        atualizarHTML("text-danger", "text-success", "Disponível", "#areaOcupado", "#areaDisponivel");
-                        chat.server.joinRoom(idConsultor, nomeConsultor, true);
-                        chat.server.status(idConsultor, false);
-                    } else {
-                        trocarStatus();
-                        atualizarHTML("text-success", "text-danger", "Ocupado", "#areaDisponivel", "#areaOcupado");
-                        chat.server.status(idConsultor, true);
-                    }
-                });
-
-                $('#send').click(function () {
-                    chat.server.send(nomeConsultor, $('#message').val(), idConsultor);
-                    chat.server.storeMessage($('#message').val(), idConsultor, 0, idAtendimento);
-
-                    $('#message').val('').focus();
-                    var target = $('#mensagens');
-                    target.animate({
-                        scrollTop: target.height()
-                    }, 500);
-                });
-
-            });
-        });
-
-        // This optional function html-encodes messages for display in the page.
-        function htmlEncode(value) {
-            var encodedValue = $('<div />').text(value).html();
-            return encodedValue;
+                numberCountdown.innerText = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+            }
         }
 
         function getStatus() {
@@ -185,9 +189,15 @@
                 type: "POST",
                 dataType: "JSON",
                 success: function (data) {
-                    if (data) {
-                        if ($("#ckStatus").is(":checked")) $("#ckStatus").prop("checked", false);
-                        atualizarHTML("text-success", "text-danger", "Ocupado", "#areaDisponivel", "#areaOcupado");
+                    if (data.ConsultorOcupado) {
+                        if (!data.AtendimentoEncerrado) {
+                            if (!$("#ckStatus").is(":checked")) $("#ckStatus").prop("checked", true);
+                            atualizarHTML("text-danger", "text-success", "Disponível", "#areaOcupado", "#areaDisponivel");
+                            carregarMensagens(data.IdAtendimento);
+                        } else {
+                            if ($("#ckStatus").is(":checked")) $("#ckStatus").prop("checked", false);
+                            atualizarHTML("text-success", "text-danger", "Ocupado", "#areaDisponivel", "#areaOcupado");
+                        }
                     } else {
                         if (!$("#ckStatus").is(":checked")) $("#ckStatus").prop("checked", true);
                         atualizarHTML("text-danger", "text-success", "Disponível", "#areaOcupado", "#areaDisponivel");
@@ -211,6 +221,26 @@
 
             $("#areaChat").find(areaAdicionar).removeClass("hidden");
             $("#areaChat").find(areaRemover).addClass("hidden");
+        }
+
+        // Só será executado caso o atendimento ainda não foi encerrado
+        function carregarMensagens(idAtendimento) {
+            idAtendimento = JSON.stringify({ 'idAtendimento': idAtendimento })
+            $.ajax({
+                url: "/Consultor/Home/GetMensagens",
+                type: "POST",
+                data: idAtendimento,
+                contentType: "application/json; charset=utf-8",
+                dataType: "JSON",
+                success: function (data) {
+                    for (i = 0; i < data.length; i++) {
+                        console.log(data);
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                } 
+            })
         }
     </script>
 }

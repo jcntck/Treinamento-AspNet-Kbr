@@ -15,6 +15,8 @@ namespace TreinamentoAspNet02.Chat
     {
         public string ConnectionId { get; set; }
         public int IdAtendimento { get; set; }
+        public bool AtendimentoIniciado { get; set; }
+        public int TempoSobrando { get; set; }
     }
 
     public class GroupsDetail

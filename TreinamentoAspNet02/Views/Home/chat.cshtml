@@ -22,10 +22,6 @@
 <input type="hidden" id="nomeVisitante" value="@Model.Visitante.Nome" />
 <input type="hidden" id="duracao" value="@Model.AtendimentoAtual.Duracao" />
 
-@* provisório *@
-<span>* Temporário *</span>
-<button class="btn btn-default" id="desconectar">Desconectar</button>
-
 <div class="well well-lg bg-consultor">
     <div id="numberCountdown" class="flex-duracao"></div>
     <div id="areaChat">
@@ -49,22 +45,29 @@
     <script src="~/Content/sweetalert.min.js"></script>
     <script src="~/signalr/hubs"></script>
     <script>
+        var chat = $.connection.chatHub;
+        var idAtendimento = $("#idAtendimento").val();
+        var idConsultor = $("#idConsultor").val();
+        var idVisitante = $("#idVisitante").val();
+        var nomeVisitante = $("#nomeVisitante").val();
+
         $(function () {
-            var chat = $.connection.chatHub;
-            var idAtendimento = $("#idAtendimento").val();
-            var idConsultor = $("#idConsultor").val();
-            var idVisitante = $("#idVisitante").val();
-            var nomeVisitante = $("#nomeVisitante").val();
 
             clientsMethods(chat);
-            startCountdown();
+
+            $('#message').focus();
+            $('#message').keypress(function (e) {
+                if (e.which == 13) {//Enter key pressed
+                    $('#send').trigger('click');//Trigger search button click event
+                }
+            });
 
             $.connection.hub.start().done(function () {
 
                 chat.server.connect("Visitante", false, $("#idAtendimento").val());
                 chat.server.joinRoom(idConsultor, nomeVisitante, false);
 
-                $('#sendmessage').click(function () {
+                $('#send').click(function () {
                     chat.server.send(nomeVisitante, $('#message').val(), idConsultor);
                     chat.server.storeMessage($('#message').val(), null, idVisitante, idAtendimento);
                     $('#message').val('').focus();
@@ -75,28 +78,33 @@
                     window.location.replace("/")
                 });
 
-            });
+                startTimer(chat);
 
-            $('#message').focus();
-            $('#message').keypress(function (e) {
-                if (e.which == 13) {//Enter key pressed
-                    $('#sendmessage').trigger('click');//Trigger search button click event
-                }
             });
 
         });
-
-        // This optional function html-encodes messages for display in the page.
-        function htmlEncode(value) {
-            var encodedValue = $('<div />').text(value).html();
-            return encodedValue;
+        var duracao = $("#duracao").val();
+        duracao = duracao * 60;
+        function startTimer(chat) {
+            if (duracao > 0) {
+                duracao--;
+                chat.server.saveTime(duracao, idConsultor, idAtendimento);
+                console.log(duracao)
+                setTimeout('startTimer(chat)', 1000);
+            }
         }
 
         function clientsMethods(chat) {
 
+            // This optional function html-encodes messages for display in the page.
+            function htmlEncode(value) {
+                var encodedValue = $('<div />').text(value).html();
+                return encodedValue;
+            }
+
             // Adicionar mensagens para o client
             chat.client.addNewMessageToPage = function (name, message) {
-                $('#discussion').append('<li><strong>' + htmlEncode(name) + '</strong>: ' + htmlEncode(message) + '</li>');
+                $('#mensagens').append('<li><strong>' + htmlEncode(name) + '</strong>: ' + htmlEncode(message) + '</li>');
             };
 
             // Aviso quando visitante entrar na sala.
@@ -109,26 +117,22 @@
                 $("#avisos").append(aviso);
             }
 
-        }
+            // Contagem regressiva;
+            chat.client.timer = function (tempoRestante) {
+                console.log(tempoRestante);
+                duracao = tempoRestante;
 
-        // temporário
-
-        var g_iCount = new Number();
-
-        // de 30 a 0 //
-        var g_iCount = parseInt($("#duracao").val()) * 60;
-
-        function startCountdown() {
-            if ((g_iCount - 1) >= 0) {
-                g_iCount = g_iCount - 1;
-
-                dateObj = new Date(g_iCount * 1000);
+                dateObj = new Date(tempoRestante * 1000);
                 minutes = dateObj.getUTCMinutes();
                 seconds = dateObj.getSeconds();
 
                 numberCountdown.innerText = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
-                setTimeout('startCountdown()', 1000);
             }
+            // Encerrar atendimento quando acabar o tempo
+            chat.client.encerrarAtendimento = function () {
+                window.location.replace("/")
+            }
+
         }
     </script>
 }

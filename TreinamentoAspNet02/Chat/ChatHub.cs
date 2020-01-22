@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNet.SignalR;
@@ -18,9 +19,9 @@ namespace TreinamentoAspNet02.Chat
         private sistema_atendimentoEntities db = new sistema_atendimentoEntities();
         #endregion
 
-        public void Send(string name, string message, string group)
+        public Task Send(string name, string message, string group)
         {
-            Clients.Group(group).addNewMessageToPage(name, message);
+            return Clients.Group(group).addNewMessageToPage(name, message);
         }
 
         public void Status(string idConsultor, bool status)
@@ -45,12 +46,12 @@ namespace TreinamentoAspNet02.Chat
             var id = Context.ConnectionId;
             if (user)
             {
-                var consultor = db.AspNetUsers.FirstOrDefault(x => x.UserName == Context.User.Identity.Name);
-                if (consultor != null)
-                {
-                    consultor.Ocupado = true;
-                    db.SaveChanges();
-                }
+                //var consultor = db.AspNetUsers.FirstOrDefault(x => x.UserName == Context.User.Identity.Name);
+                //if (consultor != null)
+                //{
+                //    consultor.Ocupado = true;
+                //    db.SaveChanges();
+                //}
 
                 var item = ConnectedUsers.FirstOrDefault(x => x.UserName == Context.User.Identity.Name);
                 if (item == null)
@@ -70,9 +71,14 @@ namespace TreinamentoAspNet02.Chat
             }
             else
             {
-                if (ConnectedVisitantes.Count(x => x.ConnectionId == id) == 0)
+                if (ConnectedVisitantes.Count(x => x.IdAtendimento == idAtendimento) == 0)
                 {
-                    ConnectedVisitantes.Add(new VisitanteDetail { ConnectionId = id, IdAtendimento = (int)idAtendimento });
+                    ConnectedVisitantes.Add(new VisitanteDetail { ConnectionId = id, IdAtendimento = (int)idAtendimento, AtendimentoIniciado = false, TempoSobrando = -1 });
+                }
+                else
+                {
+                    var visitante = ConnectedVisitantes.FirstOrDefault(x => x.IdAtendimento == idAtendimento);
+                    visitante.ConnectionId = id;
                 }
             }
         }
@@ -126,9 +132,6 @@ namespace TreinamentoAspNet02.Chat
                 }
             }
 
-            var isVisitante = ConnectedVisitantes.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
-            if (isVisitante != null) Desconectar();
-
             return base.OnDisconnected(stopCalled);
         }
 
@@ -138,16 +141,9 @@ namespace TreinamentoAspNet02.Chat
             Clients.All.gerarListagem(ConnectedUsers);
         }
 
-        public void Desconectar()
+        public void Desconectar(int idAtendimento)
         {
-            var group = GroupsControl.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
-            if (group != null)
-            {
-                LeaveRoom(group.Name);
-                GroupsControl.Remove(group);
-            }
-
-            var item = ConnectedVisitantes.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
+            var item = ConnectedVisitantes.FirstOrDefault(x => x.IdAtendimento == idAtendimento);
             if (item != null)
             {
                 var atendimento = db.Atendimentos.Find(item.IdAtendimento);
@@ -165,12 +161,44 @@ namespace TreinamentoAspNet02.Chat
                     {
                         Clients.Client(itemConsultor.ConnectionId).atendimentoEncerrado(atendimento.Id);
                     }
+
+                    var group = GroupsControl.FirstOrDefault(x => x.Name == consultor.Id);
+                    if (group != null)
+                    {
+                        LeaveRoom(group.Name);
+                        GroupsControl.Remove(group);
+                    }
                 }
 
                 db.SaveChanges();
                 ConnectedVisitantes.Remove(item);
             }
-            #endregion
+
         }
+
+        public void saveTime(int duracao, string roomName, int idAtendimento)
+        {
+            var atendimento = ConnectedVisitantes.FirstOrDefault(x => x.IdAtendimento == idAtendimento);
+            if (atendimento != null)
+            {
+                if (!atendimento.AtendimentoIniciado)
+                {
+                    atendimento.AtendimentoIniciado = true;
+                    atendimento.TempoSobrando = duracao;
+                    Clients.Group(roomName).timer(duracao);
+                }
+
+                if (atendimento.TempoSobrando > duracao) atendimento.TempoSobrando = duracao;
+                Clients.Group(roomName).timer(atendimento.TempoSobrando);
+
+                if (duracao == 0)
+                {
+                    Desconectar(idAtendimento);
+                    Clients.Client(Context.ConnectionId).encerrarAtendimento();
+                }
+            }
+
+        }
+        #endregion
     }
 }
