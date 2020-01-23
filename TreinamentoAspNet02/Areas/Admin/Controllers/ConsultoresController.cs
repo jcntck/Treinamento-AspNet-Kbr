@@ -19,7 +19,9 @@ namespace TreinamentoAspNet02.Areas.Admin.Controllers
     {
         private ApplicationDbContext Context;
         private ApplicationUserManager _userManager;
-        private sistema_atendimentoEntities db = new sistema_atendimentoEntities();
+        //private sistema_atendimentoEntities db = new sistema_atendimentoEntities();
+        private sistema_atendimentoEntities1 db = new sistema_atendimentoEntities1();
+
 
         public ConsultoresController()
         {

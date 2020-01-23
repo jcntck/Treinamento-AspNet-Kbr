@@ -22,6 +22,10 @@
 <input type="hidden" id="nomeVisitante" value="@Model.Visitante.Nome" />
 <input type="hidden" id="duracao" value="@Model.AtendimentoAtual.Duracao" />
 
+<div class="alert alert-danger" role="alert">
+    <p><strong>AVISO:</strong> recarregar, sair ou desconectar desta página atual resultará no encerramento do atendimento. Neste caso, solicitar um novo atendimento.</p>
+</div>
+
 <div class="well well-lg bg-consultor">
     <div id="numberCountdown" class="flex-duracao"></div>
     <div id="areaChat">
@@ -32,6 +36,7 @@
                 <div id="mensagens" style="overflow-y: scroll"></div>
             </div>
 
+            <small id="digitando"></small>
             <div class="flex">
                 <input type="text" class="col-lg-10 input-message" id="message">
                 <input type="button" class="btn btn-default" id="send" value="Enviar" />
@@ -71,6 +76,11 @@
                     chat.server.send(nomeVisitante, $('#message').val(), idConsultor);
                     chat.server.storeMessage($('#message').val(), null, idVisitante, idAtendimento);
                     $('#message').val('').focus();
+                    var target = $('#mensagens');
+                    target.animate({
+                        scrollTop: target.height()
+                    }, 500);
+                    chat.server.clean(idConsultor, idAtendimento);
                 });
 
                 $("#desconectar").click(function () {
@@ -79,6 +89,11 @@
                 });
 
                 startTimer(chat);
+
+                $('#message').keypress(function () {
+                    console.log("Pressionando teclas");
+                    chat.server.keyPress(nomeVisitante, idConsultor, idAtendimento);
+                })
 
             });
 
@@ -89,7 +104,6 @@
             if (duracao > 0) {
                 duracao--;
                 chat.server.saveTime(duracao, idConsultor, idAtendimento);
-                console.log(duracao)
                 setTimeout('startTimer(chat)', 1000);
             }
         }
@@ -104,7 +118,7 @@
 
             // Adicionar mensagens para o client
             chat.client.addNewMessageToPage = function (name, message) {
-                $('#mensagens').append('<li><strong>' + htmlEncode(name) + '</strong>: ' + htmlEncode(message) + '</li>');
+                $('#mensagens').append('<li class="item-mensagem"><p class="text-justify"><strong>' + htmlEncode(name) + '</strong>: ' + htmlEncode(message) + '</p></li>');
             };
 
             // Aviso quando visitante entrar na sala.
@@ -113,26 +127,36 @@
                 var aviso = $("<div />", {
                     class: "alert alert-warning",
                     role: "alert"
-                }).html("Atendimento iníciado, quando o tempo se esgotar você será automaticamente retirado no chat. <strong>AVISO:</strong> caso você saia ou desconecte o atendimento será encerrado.");
+                }).html("Atendimento iníciado, quando o tempo se esgotar você será automaticamente retirado no chat.");
                 $("#avisos").append(aviso);
             }
 
             // Contagem regressiva;
             chat.client.timer = function (tempoRestante) {
-                console.log(tempoRestante);
                 duracao = tempoRestante;
 
                 dateObj = new Date(tempoRestante * 1000);
                 minutes = dateObj.getUTCMinutes();
                 seconds = dateObj.getSeconds();
 
-                numberCountdown.innerText = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+                try {
+                    numberCountdown.innerText = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+                } catch (err) {
+                    numberCountdown.innerText = minutes.toString() + ':' + seconds.toString();
+                }
             }
             // Encerrar atendimento quando acabar o tempo
             chat.client.encerrarAtendimento = function () {
                 window.location.replace("/")
             }
 
+            chat.client.digitando = function (nome) {
+                $("#digitando").html(nome + " está digitando...");
+            }
+
+            chat.client.clean = function () {
+                $("#digitando").empty();
+            }
         }
     </script>
 }

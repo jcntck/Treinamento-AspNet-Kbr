@@ -10,7 +10,9 @@ namespace TreinamentoAspNet02.Controllers
 {
     public class VisitanteController : Controller
     {
-        private sistema_atendimentoEntities db = new sistema_atendimentoEntities();
+        //private sistema_atendimentoEntities db = new sistema_atendimentoEntities();
+        private sistema_atendimentoEntities1 db = new sistema_atendimentoEntities1();
+
         // GET: Visitante/Create
         public ActionResult Create(string consultorId)
         {

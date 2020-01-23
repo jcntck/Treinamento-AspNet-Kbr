@@ -1,0 +1,12 @@
+﻿@model TreinamentoAspNet02.Areas.Admin.Models.AtendimentoDetalhesViewModel
+@{
+    ViewBag.Title = "Detalhes do atendimento";
+}
+
+    <ul>
+
+        @foreach (var msgs in @Model.Mensagens)
+        {
+            <li>@(msgs.enviadoPorConsultor != null ? Model.Consultor.Nome : Model.Visitante.Nome): @msgs.Mensagem</li>
+        }
+    </ul>

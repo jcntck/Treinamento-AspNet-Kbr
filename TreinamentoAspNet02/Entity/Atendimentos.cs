@@ -23,8 +23,8 @@ namespace TreinamentoAspNet02.Entity
         public int Id { get; set; }
         public string Id_Consultor { get; set; }
         public Nullable<int> Id_Visitante { get; set; }
-        public bool Encerrado { get; set; }
         public Nullable<System.DateTime> Data { get; set; }
+        public bool Encerrado { get; set; }
         public Nullable<int> Duracao { get; set; }
     
         public virtual AspNetUsers AspNetUsers { get; set; }
