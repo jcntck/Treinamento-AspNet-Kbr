@@ -92,7 +92,7 @@ namespace TreinamentoAspNet02.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                string foto = Image.Save(model.FotoPerfil);
+                string foto = FileHelper.Save(model.FotoPerfil, "~/Images/Perfil");
 
                 var user = new ApplicationUser
                 {
@@ -150,7 +150,7 @@ namespace TreinamentoAspNet02.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var user = UserManager.FindById(model.Id);
-                string foto = Image.Update(model.FotoAntiga, model.FotoPerfil);
+                string foto = FileHelper.Update(model.FotoAntiga, model.FotoPerfil);
 
                 if (!user.Email.Equals(model.Email))
                 {
@@ -211,7 +211,7 @@ namespace TreinamentoAspNet02.Areas.Admin.Controllers
 
             UserManager.SendEmail(user.Id, "Conta excluida", "Sua conta no Helpchat foi deletada.\nData/hora:" + String.Format("{0: dd/MM/yyyy - HH:mm:ss}", DateTime.Now));
 
-            Image.Delete(user.FotoPerfil);
+            FileHelper.Delete(user.FotoPerfil);
             var result = UserManager.Delete(user);
 
             if (result.Succeeded)

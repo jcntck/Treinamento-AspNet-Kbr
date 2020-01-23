@@ -55,7 +55,7 @@ namespace TreinamentoAspNet02.Areas.Consultor.Controllers
                 {
                     Id = mensagem.Id,
                     Mensagem = mensagem.Mensagem,
-                    // Arquivo
+                    Arquivo = mensagem.Arquivo,
                     idConsultor = mensagem.enviadoPorConsultor,
                     idVisitante = mensagem.enviadoPorVisitante,
                     idAtendimento = mensagem.Id_Atendimento

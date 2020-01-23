@@ -16,7 +16,6 @@
 </div>
 
 @* Informações necessárias *@
-<input type="hidden" id="idAtendimento" value="@Model.AtendimentoAtual.Id" />
 <input type="hidden" id="idConsultor" value="@Model.Consultor.Id" />
 <input type="hidden" id="idVisitante" value="@Model.Visitante.Id" />
 <input type="hidden" id="nomeVisitante" value="@Model.Visitante.Nome" />
@@ -38,6 +37,13 @@
 
             <small id="digitando"></small>
             <div class="flex">
+                <form method="post" enctype="multipart/form-data" id="uploadFile">
+                    <input type="hidden" id="idAtendimento" name="idAtendimento" value="@Model.AtendimentoAtual.Id" />
+                    <input type="hidden" id="who" name="who" value="visitante" />
+                    <label class="btn btn-default btn-file">
+                        Browse <input type="file" style="display: none;" name="file">
+                    </label>
+                </form>
                 <input type="text" class="col-lg-10 input-message" id="message">
                 <input type="button" class="btn btn-default" id="send" value="Enviar" />
             </div>
@@ -95,6 +101,31 @@
                     chat.server.keyPress(nomeVisitante, idConsultor, idAtendimento);
                 })
 
+                $('input[type="file"]').on('change', function (e) {
+                    if (e.target.files[0] && idAtendimento) {
+                        
+                        var form = $('#uploadFile')[0];
+                        var data = new FormData(form);
+
+                        $.ajax({
+                            url: "/Home/StoreFile",
+                            type: "POST",
+                            data: data,
+                            enctype: 'multipart/form-data',
+                            processData: false, 
+                            contentType: false,
+                            dataType: "JSON",
+                            success: function (data) {
+                                chat.server.sendFile(nomeVisitante, "~/Uploads/Atendimento" + idAtendimento + "/", data, idConsultor);
+                            },
+                            error: function (error) {
+                                console.log("Error: ");
+                                console.log(error);
+                            }
+                        })
+                    }
+                });
+
             });
 
         });
@@ -120,6 +151,10 @@
             chat.client.addNewMessageToPage = function (name, message) {
                 $('#mensagens').append('<li class="item-mensagem"><p class="text-justify"><strong>' + htmlEncode(name) + '</strong>: ' + htmlEncode(message) + '</p></li>');
             };
+
+            chat.client.addNewFileToPage = function (name, folder, filename) {
+                $('#mensagens').append('<li class="item-mensagem"><p class="text-justify"><strong>' + htmlEncode(name) + '</strong>: <a href="/Home/Download?folder='+htmlEncode(folder)+'&filename='+htmlEncode(filename)+'">Baixar arquivo</p></li>')
+            }
 
             // Aviso quando visitante entrar na sala.
             chat.client.aviso = function () {

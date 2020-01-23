@@ -26,6 +26,11 @@ namespace TreinamentoAspNet02.Chat
             return Clients.Group(group).addNewMessageToPage(name, message);
         }
 
+        public Task SendFile(string name, string folder, string filename, string group)
+        {
+            return Clients.Group(group).addNewFileToPage(name, folder, filename);
+        }
+
         public void Status(string idConsultor, bool status)
         {
             Clients.All.statusConsultor(idConsultor, status);
@@ -48,12 +53,6 @@ namespace TreinamentoAspNet02.Chat
             var id = Context.ConnectionId;
             if (user)
             {
-                //var consultor = db.AspNetUsers.FirstOrDefault(x => x.UserName == Context.User.Identity.Name);
-                //if (consultor != null)
-                //{
-                //    consultor.Ocupado = true;
-                //    db.SaveChanges();
-                //}
 
                 var item = ConnectedUsers.FirstOrDefault(x => x.UserName == Context.User.Identity.Name);
                 if (item == null)

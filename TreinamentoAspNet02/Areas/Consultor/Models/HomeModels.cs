@@ -9,7 +9,7 @@ namespace TreinamentoAspNet02.Areas.Consultor.Models
     {
         public int Id { get; set; }
         public string Mensagem { get; set; }
-        //Arquivo
+        public string Arquivo { get; set; }
         public string idConsultor { get; set; }
         public int? idVisitante { get; set; }
         public int? idAtendimento { get; set; }

@@ -8,20 +8,27 @@ using TreinamentoAspNet02.Models;
 
 namespace TreinamentoAspNet02.Helpers
 {
-    public static class Image
+    public static class FileHelper
     {
         //Return the name of file to save in database
-        public static string Save(HttpPostedFileBase foto)
+        public static string Save(HttpPostedFileBase file, string nameFolder)
         {
-            string nomeFoto = null;
-            if (foto != null)
+            string nomeFile = null;
+            if (file != null)
             {
-                nomeFoto = Guid.NewGuid().ToString() + System.IO.Path.GetFileName(foto.FileName).Replace(" ", "-");
-                string path = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~/Images/Perfil"), nomeFoto);            
-                foto.SaveAs(path);
+                nomeFile = Guid.NewGuid().ToString() + System.IO.Path.GetFileName(file.FileName).Replace(" ", "-");
+
+                string folder = System.Web.Hosting.HostingEnvironment.MapPath(nameFolder);
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+
+                string path = System.IO.Path.Combine(folder, nomeFile);            
+                file.SaveAs(path);
 
             }
-            return nomeFoto;
+            return nomeFile;
         }
 
         public static string Update(string fotoAntiga, HttpPostedFileBase fotoNova)
@@ -32,7 +39,7 @@ namespace TreinamentoAspNet02.Helpers
                 // Excluir img se houver
                 Delete(fotoAntiga);
                 // Salva a foto nova
-                nomeFoto = Save(fotoNova);
+                nomeFoto = Save(fotoNova, "~/Images/Perfil");
             }
             else
             {

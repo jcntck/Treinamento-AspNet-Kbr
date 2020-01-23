@@ -168,7 +168,7 @@ namespace TreinamentoAspNet02.Controllers
         {
             if (ModelState.IsValid)
             {
-                string foto = Image.Save(model.FotoPerfil);
+                string foto = FileHelper.Save(model.FotoPerfil, "~/Images/Perfil");
 
                 var user = new ApplicationUser
                 {

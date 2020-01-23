@@ -236,7 +236,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\Image.cs" />
+    <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Migrations\202001101548289_Consultor.cs" />
     <Compile Include="Migrations\202001101548289_Consultor.Designer.cs">
       <DependentUpon>202001101548289_Consultor.cs</DependentUpon>

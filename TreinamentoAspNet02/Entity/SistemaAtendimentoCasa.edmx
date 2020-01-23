@@ -78,8 +78,8 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Id_Consultor" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="Id_Visitante" Type="int" />
-          <Property Name="Data" Type="date" />
           <Property Name="Encerrado" Type="bit" Nullable="false" />
+          <Property Name="Data" Type="datetime" />
           <Property Name="Duracao" Type="int" />
         </EntityType>
         <EntityType Name="Mensagens">
@@ -320,7 +320,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Id_Consultor" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Id_Visitante" Type="Int32" />
-          <Property Name="Data" Type="DateTime" Precision="0" />
+          <Property Name="Data" Type="DateTime" Precision="3" />
           <Property Name="Encerrado" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_Atendimentos_Consultor" FromRole="Atendimentos" ToRole="AspNetUsers" />
           <NavigationProperty Name="Visitante" Relationship="Self.FK_Atendimentos_Visitante" FromRole="Atendimentos" ToRole="Visitante" />
