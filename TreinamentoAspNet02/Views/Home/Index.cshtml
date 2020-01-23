@@ -26,10 +26,9 @@
 
             chat.client.statusConsultor = function (idConsultor, status) {
                 if (status) {
-                    console.log(`Consultor Id[${idConsultor}] está ocupado.`)
 
                     $(".cardConsultor").each(function () {
-                        if ($(this).attr("id") == `div_${idConsultor}`) {
+                        if ($(this).attr("id") == 'div_' + idConsultor) {
                             var pStatus = $(this).find(".pStatus");
                             pStatus.removeClass("label-success");
                             pStatus.addClass("label-danger");
@@ -38,10 +37,9 @@
                             $(this).find("a").remove();
                         }
                     });
-                } else {
-                    console.log(`Consultor Id[${idConsultor}] está disponivel.`)
+                } else {    
                     $(".cardConsultor").each(function () {
-                        if ($(this).attr("id") == `div_${idConsultor}`) {
+                        if ($(this).attr("id") == 'div_' + idConsultor) {
                             var pStatus = $(this).find(".pStatus");
                             pStatus.removeClass("label-danger");
                             pStatus.addClass("label-success");
@@ -73,7 +71,7 @@
                         for (i = 0; i < data.length; i++) {
                             var div = $("<div />", {
                                 class: "col-md-3 cardConsultor",
-                                id: `div_${data[i].Id}`,
+                                id: 'div_' + data[i].Id,
                                 style: "min-height: 200px; margin: 10px 10px 10px 0; padding: 20px;"
                             });
 
@@ -133,7 +131,7 @@
 
         function criarLinkFicha(idConsultor) {
             return $("<a />", {
-                href: `/Visitante/Create?consultorId=${idConsultor}`,
+                href: '/Visitante/Create?consultorId=' + idConsultor,
                 title: "Iníciar atendimento com este consultor",
                 class: "btn btn-lg btn-default btnFicha",
                 style: "margin-top: 10px"

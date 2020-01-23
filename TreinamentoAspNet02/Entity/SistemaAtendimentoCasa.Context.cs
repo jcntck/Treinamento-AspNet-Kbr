@@ -13,10 +13,10 @@ namespace TreinamentoAspNet02.Entity
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class sistema_atendimentoEntities : DbContext
+    public partial class sistema_atendimentoEntities1 : DbContext
     {
-        public sistema_atendimentoEntities()
-            : base("name=sistema_atendimentoEntities")
+        public sistema_atendimentoEntities1()
+            : base("name=sistema_atendimentoEntities1")
         {
         }
     

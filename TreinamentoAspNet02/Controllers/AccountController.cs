@@ -21,7 +21,9 @@ namespace TreinamentoAspNet02.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private sistema_atendimentoEntities db = new sistema_atendimentoEntities();
+        //private sistema_atendimentoEntities db = new sistema_atendimentoEntities();
+        private sistema_atendimentoEntities1 db = new sistema_atendimentoEntities1();
+
 
         public AccountController()
         {

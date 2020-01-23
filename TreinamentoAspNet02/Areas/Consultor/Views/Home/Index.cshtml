@@ -33,11 +33,12 @@
         @* Disponível *@
         <div class="hidden" id="areaDisponivel">
             <div id="numberCountdown" class="flex-duracao"></div>
+            <div id="avisos" class="avisos"></div>
             <div class="well well-lg bg-mensagens flex-column-reverse">
-                <div id="avisos"></div>
-                <div id="mensagens" style="overflow-y: scroll"></div>
+                <div id="mensagens" style="overflow-y: scroll; overflow-x: hidden;"></div>
             </div>
 
+            <small id="digitando"></small>
             <div class="flex">
                 <input type="text" class="col-lg-10 input-message" id="message">
                 <input type="button" class="btn btn-default" id="send" value="Enviar" />
@@ -54,17 +55,18 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script src="~/signalr/hubs"></script>
     <script>
+        var chat = $.connection.chatHub;
+        var idAtendimento = null;
+        var idConsultor = $("#idConsultor").val();
+        var nomeConsultor = $("#nomeConsultor").val();
+
         $(function () {
-            var chat = $.connection.chatHub;
-            var idAtendimento;
-            var idConsultor = $("#idConsultor").val();
-            var nomeConsultor = $("#nomeConsultor").val();
 
             clientsMethods(chat);
 
             $.connection.hub.start().done(function () {
-                getStatus();
                 chat.server.connect("@User.Identity.Name", true, 0);
+                getStatus(chat);
 
                 $("#ckStatus").click(function () {
                     if ($(this).is(":checked")) {
@@ -81,6 +83,7 @@
 
                 $('#send').click(function () {
                     chat.server.send(nomeConsultor, $('#message').val(), idConsultor);
+                    console.log("Estou na função de click, este é o IdAtendimento " + idAtendimento);
                     chat.server.storeMessage($('#message').val(), idConsultor, 0, idAtendimento);
 
                     $('#message').val('').focus();
@@ -88,7 +91,12 @@
                     target.animate({
                         scrollTop: target.height()
                     }, 500);
+                    chat.server.clean(idConsultor, idAtendimento);
                 });
+
+                $('#message').keypress(function () {
+                    chat.server.keyPress(nomeConsultor, idConsultor, idAtendimento);
+                })
 
             });
 
@@ -120,7 +128,7 @@
             }
 
             chat.client.addNewMessageToPage = function (name, message) {
-                $('#mensagens').append('<li><strong>' + htmlEncode(name) + '</strong>: ' + htmlEncode(message) + '</li>');
+                $('#mensagens').append('<li class="item-mensagem"><p class="text-justify"><strong>' + htmlEncode(name) + '</strong>: ' + htmlEncode(message) + '</p></li>');
             };
 
             chat.client.novoAtendimento = function (id, name) {
@@ -129,10 +137,11 @@
                 var aviso = $("<div />", {
                     class: "alert alert-info",
                     role: "alert"
-                }).html(`<em>Atendimento #${htmlEncode(id)}</em> - <strong>${htmlEncode(name)}</strong> iníciou um novo atendimento com você.`);
+                }).html(`<em>Atendimento #${htmlEncode(id)}</em> - <strong>${htmlEncode(name)}</strong> iníciou um novo atendimento com você. Os atendimentos anteriores estão salvos em Histórico de atendimentos.`);
 
-                $("#avisos").empty();
-                $('#avisos').append(aviso);
+                $("#mensagens").empty();
+                $('#mensagens').append(aviso);
+                $('#ckStatus').prop('disabled', true);
             };
 
             chat.client.atendimentoEncerrado = function (id) {
@@ -141,8 +150,8 @@
                     role: "alert"
                 }).html(`<em>Atendimento #${htmlEncode(id)}</em> foi encerrado.`);
 
-                $("#avisos").empty();
-                $('#avisos').append(aviso);
+                $('#mensagens').append(aviso);
+                $('#ckStatus').prop('disabled', false);
             };
 
             chat.client.errorMessage = function () {
@@ -179,11 +188,23 @@
                 minutes = dateObj.getUTCMinutes();
                 seconds = dateObj.getSeconds();
 
-                numberCountdown.innerText = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+                try {
+                    numberCountdown.innerText = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+                } catch (err) {
+                    numberCountdown.innerText = minutes.toString() + ':' + seconds.toString();
+                }
+            }
+
+            chat.client.digitando = function (nome) {
+                $("#digitando").html(nome + " está digitando...");
+            }
+
+            chat.client.clean = function () {
+                $("#digitando").empty();
             }
         }
 
-        function getStatus() {
+        function getStatus(chat) {
             $.ajax({
                 url: "/Consultor/Home/GetStatus",
                 type: "POST",
@@ -193,6 +214,15 @@
                         if (!data.AtendimentoEncerrado) {
                             if (!$("#ckStatus").is(":checked")) $("#ckStatus").prop("checked", true);
                             atualizarHTML("text-danger", "text-success", "Disponível", "#areaOcupado", "#areaDisponivel");
+                            chat.server.joinRoom(idConsultor, nomeConsultor, true);
+
+                            var aviso = $("<div />", {
+                                class: "alert alert-info",
+                                role: "alert"
+                            }).html(`<em>Atendimento #${data.IdAtendimento}</em> - <strong> em andamento. Os atendimentos anteriores estão salvos em Histórico de atendimentos.`);
+
+                            $('#mensagens').append(aviso);
+
                             carregarMensagens(data.IdAtendimento);
                         } else {
                             if ($("#ckStatus").is(":checked")) $("#ckStatus").prop("checked", false);
@@ -200,6 +230,7 @@
                         }
                     } else {
                         if (!$("#ckStatus").is(":checked")) $("#ckStatus").prop("checked", true);
+                        chat.server.joinRoom(idConsultor, nomeConsultor, true);
                         atualizarHTML("text-danger", "text-success", "Disponível", "#areaOcupado", "#areaDisponivel");
                     }
                 },
@@ -234,12 +265,12 @@
                 dataType: "JSON",
                 success: function (data) {
                     for (i = 0; i < data.length; i++) {
-                        console.log(data);
+                        //console.log(data);
                     }
                 },
                 error: function (error) {
-                    console.log(error);
-                } 
+                    //console.log(error);
+                }
             })
         }
     </script>

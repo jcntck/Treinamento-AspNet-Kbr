@@ -10,6 +10,13 @@
     height: 55vh;
 }
 
+.item-mensagem {
+    margin: 10px 0;
+    list-style: none;
+    overflow-wrap: break-word;
+}
+
+
 .text-consultor {
     color: #275296;
 }
@@ -38,7 +45,6 @@
     flex-direction: column;
     justify-content: flex-end;
 }
-
 
 .input-message {
     margin: 5px;

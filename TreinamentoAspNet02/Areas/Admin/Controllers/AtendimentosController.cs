@@ -11,7 +11,9 @@ namespace TreinamentoAspNet02.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class AtendimentosController : Controller
     {
-        private sistema_atendimentoEntities db = new sistema_atendimentoEntities();
+        //private sistema_atendimentoEntities db = new sistema_atendimentoEntities();
+        private sistema_atendimentoEntities1 db = new sistema_atendimentoEntities1();
+
 
         // GET: Admin/Atendimentos
         public ActionResult Index()

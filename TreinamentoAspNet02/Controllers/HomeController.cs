@@ -12,7 +12,9 @@ namespace TreinamentoAspNet02.Controllers
 {
     public class HomeController : Controller
     {
-        private sistema_atendimentoEntities db = new sistema_atendimentoEntities();
+        //private sistema_atendimentoEntities db = new sistema_atendimentoEntities();
+        private sistema_atendimentoEntities1 db = new sistema_atendimentoEntities1();
+
         public ActionResult Index()
         {
             var users = db.AspNetRoles.Where(s => s.Name == "Consultor").FirstOrDefault().AspNetUsers.OrderByDescending(s => s.AutoId).ToList();
@@ -31,8 +33,8 @@ namespace TreinamentoAspNet02.Controllers
             var atendimentoAtual = db.Atendimentos.Find(id);
             var consultor = db.AspNetUsers.Find(atendimentoAtual.Id_Consultor);
 
-            //if (atendimentoAtual != null && !atendimentoAtual.Encerrado && !consultor.Ocupado)
-            //{
+            if (atendimentoAtual != null && !atendimentoAtual.Encerrado && !consultor.Ocupado)
+            {
                 var model = new AtendimentoViewModel
                 {
                     AtendimentoAtual = atendimentoAtual,
@@ -40,8 +42,8 @@ namespace TreinamentoAspNet02.Controllers
                     Visitante = db.Visitante.Find(atendimentoAtual.Id_Visitante)
                 };
                 return View(model);
-            //}
-            //return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
         }
 
         [HttpPost]

@@ -11,7 +11,9 @@ namespace TreinamentoAspNet02.Areas.Consultor.Controllers
     [Authorize(Roles = "Consultor")]
     public class HomeController : Controller
     {
-        private sistema_atendimentoEntities db = new sistema_atendimentoEntities();
+        //private sistema_atendimentoEntities db = new sistema_atendimentoEntities();
+        private sistema_atendimentoEntities1 db = new sistema_atendimentoEntities1();
+
         // GET: Consultor/Home
         public ActionResult Index()
         {

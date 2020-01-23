@@ -16,7 +16,9 @@ namespace TreinamentoAspNet02.Chat
         static List<UserDetail> ConnectedUsers = new List<UserDetail>();
         static List<VisitanteDetail> ConnectedVisitantes = new List<VisitanteDetail>();
         static List<GroupsDetail> GroupsControl = new List<GroupsDetail>();
-        private sistema_atendimentoEntities db = new sistema_atendimentoEntities();
+        //private sistema_atendimentoEntities db = new sistema_atendimentoEntities();
+        private sistema_atendimentoEntities1 db = new sistema_atendimentoEntities1();
+
         #endregion
 
         public Task Send(string name, string message, string group)
@@ -132,6 +134,9 @@ namespace TreinamentoAspNet02.Chat
                 }
             }
 
+            var visitante = ConnectedVisitantes.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
+            if (visitante != null) Desconectar(visitante.IdAtendimento);
+
             return base.OnDisconnected(stopCalled);
         }
 
@@ -193,11 +198,55 @@ namespace TreinamentoAspNet02.Chat
 
                 if (duracao == 0)
                 {
+                    atendimento.TempoSobrando = -1;
                     Desconectar(idAtendimento);
                     Clients.Client(Context.ConnectionId).encerrarAtendimento();
                 }
             }
 
+        }
+
+        public void keyPress(string nome, string idConsultor, int idAtendimento)
+        {
+            var consultor = db.AspNetUsers.Find(idConsultor);
+            var item = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
+            if (item != null)
+            {
+                var visitante = ConnectedVisitantes.FirstOrDefault(x => x.IdAtendimento == idAtendimento);
+                if (visitante != null)
+                {
+                    Clients.Client(visitante.ConnectionId).digitando(consultor.Nome);
+                }
+            } else
+            {
+                var itemConsultor = ConnectedUsers.FirstOrDefault(x => x.UserName == consultor.UserName);
+                if (itemConsultor != null)
+                {
+                    Clients.Client(itemConsultor.ConnectionId).digitando(nome);
+                }
+            }
+        }
+
+        public void clean(string idConsultor, int idAtendimento)
+        {
+            var consultor = db.AspNetUsers.Find(idConsultor);
+            var item = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
+            if (item != null)
+            {
+                var visitante = ConnectedVisitantes.FirstOrDefault(x => x.IdAtendimento == idAtendimento);
+                if (visitante != null)
+                {
+                    Clients.Client(visitante.ConnectionId).clean();
+                }
+            }
+            else
+            {
+                var itemConsultor = ConnectedUsers.FirstOrDefault(x => x.UserName == consultor.UserName);
+                if (itemConsultor != null)
+                {
+                    Clients.Client(itemConsultor.ConnectionId).clean();
+                }
+            }
         }
         #endregion
     }
