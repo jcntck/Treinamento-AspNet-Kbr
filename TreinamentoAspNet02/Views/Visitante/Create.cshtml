@@ -4,7 +4,7 @@
 }
 
 <div class="container">
-    <h2>@ViewBag.Title.</h2>
+    <h2>@ViewBag.Title</h2>
 
     @using (Html.BeginForm("Create", "Visitante", FormMethod.Post, new { role = "form" }))
     {
@@ -24,12 +24,12 @@
         </div>
         <div class="form-group">
             @Html.LabelFor(m => m.Celular, new { @class = "control-label" })
-            @Html.TextBoxFor(m => m.Celular, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.Celular, new { @class = "form-control", maxlength = "15", minlength = "14" })
         </div>
         @Html.LabelFor(m => m.TempoAtendimento, new { @class = "control-label" })
         <div class="form-group">
-            @Html.RadioButtonFor(m => m.TempoAtendimento.Duracao, (int)2, new { @checked = true })
-            <text>2 min</text>
+            @Html.RadioButtonFor(m => m.TempoAtendimento.Duracao, (int)1, new { @checked = true })
+            <text>1 min</text>
             @Html.RadioButtonFor(m => m.TempoAtendimento.Duracao, (int)5)
             <text>5 min</text>
             @Html.RadioButtonFor(m => m.TempoAtendimento.Duracao, (int)30)
@@ -46,4 +46,19 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery.mask.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var SPMask = function (val) {
+                return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+            },
+                spOptions = {
+                    onKeyPress: function (val, e, field, options) {
+                        field.mask(SPMask.apply({}, arguments), options);
+                    }
+                };
+
+            $('#Celular').mask(SPMask, spOptions);
+        })
+    </script>
 }

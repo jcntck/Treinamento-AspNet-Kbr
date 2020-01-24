@@ -209,7 +209,14 @@ namespace TreinamentoAspNet02.Areas.Admin.Controllers
         {
             var user = UserManager.FindById(id);
 
-            UserManager.SendEmail(user.Id, "Conta excluida", "Sua conta no Helpchat foi deletada.\nData/hora:" + String.Format("{0: dd/MM/yyyy - HH:mm:ss}", DateTime.Now));
+            try
+            {
+                UserManager.SendEmail(user.Id, "Conta excluida", "Sua conta no Helpchat foi deletada.\nData/hora:" + String.Format("{0: dd/MM/yyyy - HH:mm:ss}", DateTime.Now));
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
 
             FileHelper.Delete(user.FotoPerfil);
             var result = UserManager.Delete(user);

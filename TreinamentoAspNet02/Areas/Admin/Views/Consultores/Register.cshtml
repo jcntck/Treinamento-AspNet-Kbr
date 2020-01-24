@@ -37,7 +37,7 @@
         </div>
         <div class="form-group">
             @Html.LabelFor(m => m.FotoPerfil, new { @class = "control-label" });
-            @Html.TextBoxFor(m => m.FotoPerfil, new { @class = "form-control" , type = "file" })
+            @Html.TextBoxFor(m => m.FotoPerfil, new { @class = "form-control" , type = "file", accept = "image/*" })
         </div>
         <div class="form-group">
             <input type="submit" class="btn btn-default" value="Cadastrar" />

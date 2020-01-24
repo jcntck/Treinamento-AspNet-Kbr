@@ -180,7 +180,7 @@ namespace TreinamentoAspNet02.Chat
 
         }
 
-        public void saveTime(int duracao, string roomName, int idAtendimento)
+        public void saveTime(int duracao, int tempoTotal, string roomName, int idAtendimento)
         {
             var atendimento = ConnectedVisitantes.FirstOrDefault(x => x.IdAtendimento == idAtendimento);
             if (atendimento != null)
@@ -189,11 +189,10 @@ namespace TreinamentoAspNet02.Chat
                 {
                     atendimento.AtendimentoIniciado = true;
                     atendimento.TempoSobrando = duracao;
-                    Clients.Group(roomName).timer(duracao);
                 }
 
                 if (atendimento.TempoSobrando > duracao) atendimento.TempoSobrando = duracao;
-                Clients.Group(roomName).timer(atendimento.TempoSobrando);
+                Clients.Group(roomName).timer(atendimento.TempoSobrando, tempoTotal);
 
                 if (duracao == 0)
                 {

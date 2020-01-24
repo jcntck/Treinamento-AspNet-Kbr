@@ -48,7 +48,7 @@
                 <div class="form-group col-md-10">
                     @Html.LabelFor(m => m.FotoPerfil, new { @class = "control-label" });
                     @Html.TextBoxFor(m => m.FotoAntiga, new { @type = "hidden" })
-                    @Html.TextBoxFor(m => m.FotoPerfil, new { @class = "form-control", type = "file" })
+                    @Html.TextBoxFor(m => m.FotoPerfil, new { @class = "form-control", type = "file", accept = "image/*" })
                     <small class="text-warning">Não selecione nenhuma imagem nova se quiser manter a foto de perfil atual.</small>
                 </div>
             </div>

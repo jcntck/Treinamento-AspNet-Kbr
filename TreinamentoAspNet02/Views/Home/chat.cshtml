@@ -142,6 +142,14 @@
                     }
                 });
 
+                $('#message').keyup(function () {
+                    if (!textLength(this.value)) {
+                        chat.server.keyPress(nomeVisitante, idConsultor, idAtendimento);
+                    } else {
+                        chat.server.clean(idConsultor, idAtendimento);
+                    }
+                })
+
 
             });
 
@@ -151,9 +159,15 @@
         function startTimer(chat) {
             if (duracao > 0) {
                 duracao--;
-                chat.server.saveTime(duracao, idConsultor, idAtendimento);
+                chat.server.saveTime(duracao, $('#duracao').val() * 60, idConsultor, idAtendimento);
                 setTimeout('startTimer(chat)', 1000);
             }
+        }
+
+        function textLength(value) {
+            var maxLength = 0;
+            if (value.length > maxLength) return false;
+            return true;
         }
 
         function clientsMethods(chat) {
@@ -184,19 +198,32 @@
             }
 
             // Contagem regressiva;
-            chat.client.timer = function (tempoRestante) {
+            chat.client.timer = function (tempoRestante, tempoTotal) {
                 duracao = tempoRestante;
 
                 dateObj = new Date(tempoRestante * 1000);
                 minutes = dateObj.getUTCMinutes();
                 seconds = dateObj.getSeconds();
 
+                dateObj = new Date(tempoTotal * 1000);
+                dMinutes = dateObj.getUTCMinutes();
+                dSeconds = dateObj.getSeconds();
+
                 try {
-                    $("#numberCountdown").html(minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0'));
+                    var tempoRestante = $("<span />", {
+                        class: "h3"
+                    }).html(minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0') + " | <span class='text-success'>" + dMinutes.toString().padStart(2, '0') + ':' + dSeconds.toString().padStart(2, '0') + "</span>");
+
+                    $('#numberCountdown').html(tempoRestante);
                 } catch (err) {
-                    numberCountdown.innerText = minutes.toString() + ':' + seconds.toString();
+                    var tempoRestante = $("<span />", {
+                        class: "h3"
+                    }).html(minutes.toString() + ':' + seconds.toString() + " | <span class='text-success'>" + dMinutes.toString() + ':' + dSeconds.toString() + "</span>");
+
+                    $('#numberCountdown').html(tempoRestante);
                 }
             }
+
             // Encerrar atendimento quando acabar o tempo
             chat.client.encerrarAtendimento = function () {
                 window.location.replace("/")

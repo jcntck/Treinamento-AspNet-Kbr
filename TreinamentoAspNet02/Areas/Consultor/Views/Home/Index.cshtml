@@ -32,8 +32,12 @@
 
         @* Disponível *@
         <div class="hidden" id="areaDisponivel">
-            <div id="numberCountdown" class="flex-duracao"></div>
-            <div id="avisos" class="avisos"></div>
+            <div class="row">
+                <div class="col-lg-10">
+                    <div id="avisos" class="avisos"></div>
+                </div>
+                <div id="numberCountdown" class="col-lg-2"></div>
+            </div>
             <div class="well well-lg bg-mensagens flex-column-reverse">
                 <div id="mensagens" style="overflow-y: scroll; overflow-x: hidden;"></div>
             </div>
@@ -121,7 +125,7 @@
                                 contentType: false,
                                 dataType: "JSON",
                                 success: function (data) {
-                                    chat.server.sendFile(nomeConsultor, "~/Uploads/Atendimento" + idAtendimento + "/", data, idConsultor);
+                                    chat.server.sendFile(nomeConsultor, "~/Uploads/Atendimento" + $('#idAtendimento').val() + "/", data, idConsultor);
                                 },
                                 error: function (error) {
                                     console.log("Error: ");
@@ -140,9 +144,17 @@
                     if (e.which == 13) {//Enter key pressed
                         $('#send').trigger('click');//Trigger search button click event
                     } else {
-                        chat.server.keyPress(nomeConsultor, idConsultor, idAtendimento);
+                         chat.server.keyPress(nomeConsultor, idConsultor, idAtendimento);
                     }
                 });
+
+                $('#message').keyup(function () {
+                    if (!textLength(this.value)) {
+                         chat.server.keyPress(nomeConsultor, idConsultor, idAtendimento);
+                    } else {
+                        chat.server.clean(idConsultor, $("#idAtendimento").val());
+                    }
+                })
 
             });
 
@@ -154,6 +166,13 @@
             var encodedValue = $('<div />').text(value).html();
             return encodedValue;
         }
+
+        function textLength(value) {
+            var maxLength = 0;
+            if (value.length > maxLength) return false;
+            return true;
+        }
+
 
         // Métodos do cliente
         function clientsMethods(chat) {
@@ -228,16 +247,28 @@
                 });
             };
 
-            chat.client.timer = function (tempoRestante) {
+            chat.client.timer = function (tempoRestante, duracao) {
 
                 dateObj = new Date(tempoRestante * 1000);
                 minutes = dateObj.getUTCMinutes();
                 seconds = dateObj.getSeconds();
 
+                dateObj = new Date(duracao * 1000);
+                dMinutes = dateObj.getUTCMinutes();
+                dSeconds = dateObj.getSeconds();
+
                 try {
-                    numberCountdown.innerText = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+                    var tempoRestante = $("<span />", {
+                        class: "h3"
+                    }).html(minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0') + " | <span class='text-success'>" + dMinutes.toString().padStart(2, '0') + ':' + dSeconds.toString().padStart(2, '0') + "</span>" );
+
+                    $('#numberCountdown').html(tempoRestante);
                 } catch (err) {
-                    numberCountdown.innerText = minutes.toString() + ':' + seconds.toString();
+                    var tempoRestante = $("<span />", {
+                        class: "h3"
+                    }).html(minutes.toString() + ':' + seconds.toString() + " | <span class='text-success'>" + dMinutes.toString() + ':' + dSeconds.toString() + "</span>" );
+
+                    $('#numberCountdown').html(tempoRestante);
                 }
             }
 
