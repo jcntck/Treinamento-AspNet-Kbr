@@ -1,12 +1,63 @@
 ﻿@model TreinamentoAspNet02.Areas.Admin.Models.AtendimentoDetalhesViewModel
 @{
     ViewBag.Title = "Detalhes do atendimento";
+    string folder = "~/Uploads/Atendimento" + @Model.Atendimento.Id + "/";
 }
 
-    <ul>
+<h2>Atendimento #@Model.Atendimento.Id</h2>
+<p>Data e hora do atendimento: @String.Format("{0:dd/MM/yyyy}", Model.Atendimento.Data) - @String.Format("{0:HH:mm}", Model.Atendimento.Data)</p>
+<hr />
+
+<div class="row">
+    <div class="col-lg-6 panel">
+        <h3 class="text-center">Informações do consultor</h3>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="img-thumbnail">
+                    @if (!Model.Consultor.FotoPerfil.IsEmpty())
+                    {
+                        <img src="~/Images/Perfil/@Model.Consultor.FotoPerfil" alt="Foto de perfil" class="img-responsive" />
+                    }
+                    else
+                    {
+                        <img src="~/Images/Perfil/semfoto.jpg" alt="Foto de perfil" class="img-responsive" />
+                    }
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <p>Nome: @Model.Consultor.Nome</p>
+                <p>Email: @Model.Consultor.Email</p>
+                <p>Descrição:</p>
+                <div style="height: 100px; overflow-y: scroll; padding: 5px; text-align: justify;">
+                    @Model.Consultor.Descricao
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <h3>Informações do Cliente</h3>
+        <p>Nome: @Model.Visitante.Nome</p>
+        <p>Email: @Model.Visitante.Email</p>
+        <p>Celular: @Model.Visitante.Celular</p>
+    </div>
+</div>
+
+<h3 class="text-capitalize text-primary">Histórico da conversa</h3>
+<div style="max-height: 300px; overflow-y: scroll">
+    <ul style="padding: 5px 0;">
 
         @foreach (var msgs in @Model.Mensagens)
         {
-            <li>@(msgs.enviadoPorConsultor != null ? Model.Consultor.Nome : Model.Visitante.Nome): @msgs.Mensagem</li>
+            if (msgs.Mensagem != null)
+            {
+                <li style="margin: 10px 0;"><strong>@(msgs.enviadoPorConsultor != null ? Model.Consultor.Nome : Model.Visitante.Nome):</strong> @msgs.Mensagem</li>
+            }
+            else
+            {
+
+                <li style="margin: 10px 0;"><strong>@(msgs.enviadoPorConsultor != null ? Model.Consultor.Nome : Model.Visitante.Nome):</strong> <a href="@Url.Action("Download", "Home", new { area = "", folder = folder, filename = msgs.Arquivo })"><i class="glyphicon glyphicon-download-alt"></i> Baixar arquivo</a></li>
+            }
         }
     </ul>
+
+</div>

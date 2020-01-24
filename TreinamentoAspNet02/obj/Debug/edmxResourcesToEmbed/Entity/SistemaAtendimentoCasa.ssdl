@@ -73,8 +73,8 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Id_Consultor" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="Id_Visitante" Type="int" />
+    <Property Name="Data" Type="date" />
     <Property Name="Encerrado" Type="bit" Nullable="false" />
-    <Property Name="Data" Type="datetime" />
     <Property Name="Duracao" Type="int" />
   </EntityType>
   <EntityType Name="Mensagens">
@@ -108,7 +108,9 @@
     <Property Name="Celular" Type="varchar(max)" />
   </EntityType>
   <Association Name="FK_Atendimentos_Consultor">
-    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
     <End Role="Atendimentos" Type="Self.Atendimentos" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="AspNetUsers">
@@ -188,7 +190,9 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_Mensagens_Atendimento">
-    <End Role="Atendimentos" Type="Self.Atendimentos" Multiplicity="0..1" />
+    <End Role="Atendimentos" Type="Self.Atendimentos" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
     <End Role="Mensagens" Type="Self.Mensagens" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Atendimentos">

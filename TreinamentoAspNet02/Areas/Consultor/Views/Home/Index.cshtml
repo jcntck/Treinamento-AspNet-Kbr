@@ -44,7 +44,7 @@
                     <input type="hidden" id="idAtendimento" name="idAtendimento" />
                     <input type="hidden" id="who" name="who" value="consultor" />
                     <label class="btn btn-default btn-file">
-                        Browse <input type="file" style="display: none;" name="file">
+                        <i class="glyphicon glyphicon-paperclip"></i> <input type="file" style="display: none;" name="file">
                     </label>
                 </form>
                 <input type="text" class="col-lg-10 input-message" id="message">
@@ -102,28 +102,36 @@
                 });
 
                 $('input[type="file"]').on('change', function (e) {
-                    if (e.target.files[0] && idAtendimento) {
-                        console.log("Estou na função upload, IdAtendimento = " + idAtendimento)
+                    var arquivo = e.target.files[0].name;
+                    if (e.target.files[0] && $('#idAtendimento').val()) {
+                        var ext = arquivo.substr(arquivo.lastIndexOf('.'));
+                        var extValidos = ['.png', '.jpg', '.docx', '.pdf', '.xls', '.xlsx', '.txt']
+                        var isValido = extValidos.some((element, index, array) => { return element == ext })
 
-                        var form = $('#uploadFile')[0];
-                        var data = new FormData(form);
+                        if (isValido) {
+                            var form = $('#uploadFile')[0];
+                            var data = new FormData(form);
 
-                        $.ajax({
-                            url: "/Home/StoreFile",
-                            type: "POST",
-                            data: data,
-                            enctype: 'multipart/form-data',
-                            processData: false, 
-                            contentType: false,
-                            dataType: "JSON",
-                            success: function (data) {
-                                chat.server.sendFile(nomeConsultor, "~/Uploads/Atendimento" + idAtendimento + "/", data, idConsultor);
-                            },
-                            error: function (error) {
-                                console.log("Error: ");
-                                console.log(error);
-                            }
-                        })
+                            $.ajax({
+                                url: "/Home/StoreFile",
+                                type: "POST",
+                                data: data,
+                                enctype: 'multipart/form-data',
+                                processData: false,
+                                contentType: false,
+                                dataType: "JSON",
+                                success: function (data) {
+                                    chat.server.sendFile(nomeConsultor, "~/Uploads/Atendimento" + idAtendimento + "/", data, idConsultor);
+                                },
+                                error: function (error) {
+                                    console.log("Error: ");
+                                    console.log(error);
+                                }
+                            })
+                        } else {
+                            $('#mensagens').append('<li class="item-mensagem"><p class="text-justify">Formato não é válido.</p ></li > ')
+                        }
+
                     }
                 });
 
@@ -131,8 +139,9 @@
                 $('#message').keypress(function (e) {
                     if (e.which == 13) {//Enter key pressed
                         $('#send').trigger('click');//Trigger search button click event
+                    } else {
+                        chat.server.keyPress(nomeConsultor, idConsultor, idAtendimento);
                     }
-                    chat.server.keyPress(nomeConsultor, idConsultor, idAtendimento);
                 });
 
             });
@@ -163,7 +172,7 @@
             };
 
             chat.client.addNewFileToPage = function (name, folder, filename) {
-                $('#mensagens').append('<li class="item-mensagem"><p class="text-justify"><strong>' + htmlEncode(name) + '</strong>: <a href="/Home/Download?folder='+htmlEncode(folder)+'&filename='+htmlEncode(filename)+'">Baixar arquivo</p></li>')
+                $('#mensagens').append('<li class="item-mensagem"><p class="text-justify"><strong>' + htmlEncode(name) + '</strong>: <a href="/Home/Download?folder='+htmlEncode(folder)+'&filename='+htmlEncode(filename)+'"><i class="glyphicon glyphicon-download-alt"></i> Baixar arquivo</p></li>')
             }
 
             chat.client.novoAtendimento = function (id, name) {
@@ -184,7 +193,7 @@
                 var aviso = $("<div />", {
                     class: "alert alert-danger",
                     role: "alert"
-                }).html(`<em>Atendimento #${htmlEncode(id)}</em> foi encerrado.`);
+                }).html('<em>Atendimento #'+htmlEncode(id)+'</em> foi encerrado.');
 
                 $("#digitando").empty();
                 $('#mensagens').append(aviso);
@@ -260,6 +269,7 @@
                             }).html('<em>Atendimento #' + data.IdAtendimento + '</em> - <strong> em andamento. Os atendimentos anteriores estão salvos em Histórico de atendimentos.');
 
                             $('#mensagens').append(aviso);
+                            $('#idAtendimento').val(data.IdAtendimento);
 
                             carregarMensagens(data.IdAtendimento);
                         } else {

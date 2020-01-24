@@ -183,6 +183,7 @@
     <Compile Include="Areas\Admin\Models\AtendimentosModels.cs" />
     <Compile Include="Areas\Admin\Models\ConsultoresViewModels.cs" />
     <Compile Include="Areas\Consultor\ConsultorAreaRegistration.cs" />
+    <Compile Include="Areas\Consultor\Controllers\AtendimentosController.cs" />
     <Compile Include="Areas\Consultor\Controllers\HomeController.cs" />
     <Compile Include="Areas\Consultor\Models\HomeModels.cs" />
     <Compile Include="Chat\ChatHub.cs" />
@@ -307,6 +308,7 @@
     <Content Include="Entity\SistemaAtendimentoCasa.edmx.diagram">
       <DependentUpon>SistemaAtendimentoCasa.edmx</DependentUpon>
     </Content>
+    <Content Include="Areas\Consultor\Views\Atendimentos\Index.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

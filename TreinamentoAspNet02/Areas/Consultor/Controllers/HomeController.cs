@@ -38,8 +38,17 @@ namespace TreinamentoAspNet02.Areas.Consultor.Controllers
             if (user.Ocupado)
             {
                 var atendimento = db.Atendimentos.OrderByDescending(a => a.Id).FirstOrDefault(x => x.Id_Consultor == user.Id);
-                dictionary.Add("IdAtendimento", atendimento.Id);
-                dictionary.Add("AtendimentoEncerrado", atendimento.Encerrado);
+                if (atendimento != null)
+                {
+                    dictionary.Add("IdAtendimento", atendimento.Id);
+                    dictionary.Add("AtendimentoEncerrado", atendimento.Encerrado);
+                }
+                else
+                {
+                    dictionary.Add("IdAtendimento", null);
+                    dictionary.Add("AtendimentoEncerrado", true);
+                }
+
             }
 
             return Json(dictionary);

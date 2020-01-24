@@ -33,7 +33,7 @@
                     <th>@atendimento.Id</th>
                     <td style="width:30%">@atendimento.NomeConsultor</td>
                     <td style="width:30%">@atendimento.NomeCliente</td>
-                    <td>@atendimento.Data</td>
+                    <td>@String.Format("{0:dd/MM/yyyy}", atendimento.Data)</td>
                     <td style="width: 60px;">
                         <a href="@Url.Action("Details","Atendimentos", new { id = atendimento.Id })" title="Mais detalhes">
                             <i class="glyphicon glyphicon-search"></i>
