@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "Histórico de atendimentos";
+    Layout = "~/Areas/Consultor/Views/Shared/_Layout.cshtml";
+}
+
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading" style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>@ViewBag.Title</h2>
+    </div>
+
+    <div style="padding: 10px;">
+        <!-- Table -->
+        <table id="atendimentosConsultor" class="table">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>Cliente</td>
+                    <td>Data do Atendimento</td>
+                    <td><i class="glyphicon glyphicon-search" title="Mais detalhes"></i></td>
+                </tr>
+            </thead>
+            @foreach (var atendimento in Model)
+            {
+                <tr>
+                    <th>@atendimento.Id</th>
+                    <td>@atendimento.NomeCliente</td>
+                    <td>@String.Format("{0:dd/MM/yyyy}", atendimento.Data)</td>
+                    <td style="width: 60px;">
+                        <a href="@Url.Action("Details","Atendimentos", new { id = atendimento.Id })" title="Mais detalhes">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+

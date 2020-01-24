@@ -3,9 +3,15 @@
     ViewBag.Title = "Página Inicial";
 }
 
-<h2>Consultores online:</h2>
-
-<div class="row" id="listagem" style="margin: auto"></div>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h2>Consultores online:</h2>
+    </div>
+    <div class="panel-body">
+        <div id="avisos"></div>
+        <div class="row" id="listagem"></div>
+    </div>
+</div>
 
 @section scripts {
     <script src="~/Scripts/jquery.signalR-2.2.2.min.js"></script>
@@ -37,7 +43,7 @@
                             $(this).find("a").remove();
                         }
                     });
-                } else {    
+                } else {
                     $(".cardConsultor").each(function () {
                         if ($(this).attr("id") == 'div_' + idConsultor) {
                             var pStatus = $(this).find(".pStatus");
@@ -64,15 +70,15 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "JSON",
                     success: function (data) {
-                        console.log(data)
+                        //console.log(data)
                         var listagem = $("#listagem");
                         listagem.empty();
-                        if ($("#aviso").length > 0) $("#aviso").remove(); 
+                        if ($("#aviso").length > 0) $("#aviso").remove();
                         for (i = 0; i < data.length; i++) {
                             var div = $("<div />", {
                                 class: "col-md-3 cardConsultor",
                                 id: 'div_' + data[i].Id,
-                                style: "min-height: 200px; margin: 10px 10px 10px 0; padding: 20px;"
+                                style: "min-height: 300px; margin: 10px 40px 10px 40px; padding: 20px;"
                             });
 
                             var id = $("<input />", {
@@ -111,9 +117,10 @@
                                 var aviso = $("<div />", {
                                     class: "alert alert-danger",
                                     role: "alert",
-                                    id: 'aviso'
-                                }).html("Você como consultor não pode solicitar atendimentos.");
-                                listagem.append(aviso)
+                                    id: 'aviso_msg'
+                                }).html("Você como consultor não pode solicitar atendimentos");
+                                $("#avisos").empty();
+                                $("#avisos").append(aviso)
                             }
 
                             listagem.append(div);

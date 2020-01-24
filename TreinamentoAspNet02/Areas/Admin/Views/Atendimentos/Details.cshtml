@@ -4,8 +4,18 @@
     string folder = "~/Uploads/Atendimento" + @Model.Atendimento.Id + "/";
 }
 
-<h2>Atendimento #@Model.Atendimento.Id</h2>
-<p>Data e hora do atendimento: @String.Format("{0:dd/MM/yyyy}", Model.Atendimento.Data) - @String.Format("{0:HH:mm}", Model.Atendimento.Data)</p>
+<div class="row" style="display: flex; align-items: center;">
+    <div class="col-lg-10">
+        <h2>Atendimento #@Model.Atendimento.Id</h2>
+        <p>Data e hora do atendimento: @String.Format("{0:dd/MM/yyyy}", Model.Atendimento.Data) - @String.Format("{0:HH:mm}", Model.Atendimento.Data)</p>
+    </div>
+    <div class="col-lg-2 text-center">
+        <a href="@Url.Action("Index")" class="btn btn-primary">
+            <i class="glyphicon glyphicon-arrow-left"></i>
+            Voltar
+        </a>
+    </div>
+</div>
 <hr />
 
 <div class="row">

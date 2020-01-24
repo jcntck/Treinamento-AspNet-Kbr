@@ -1,0 +1,48 @@
+﻿@model TreinamentoAspNet02.Areas.Admin.Models.AtendimentoDetalhesViewModel
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Consultor/Views/Shared/_Layout.cshtml";
+    string folder = "~/Uploads/Atendimento" + @Model.Atendimento.Id + "/";
+}
+<div class="row" style="display: flex; align-items: center;">
+    <div class="col-lg-10">
+        <h2>Atendimento #@Model.Atendimento.Id</h2>
+        <p>Data e hora do atendimento: @String.Format("{0:dd/MM/yyyy}", Model.Atendimento.Data) - @String.Format("{0:HH:mm}", Model.Atendimento.Data)</p>
+    </div>
+    <div class="col-lg-2 text-center" >
+        <a href="@Url.Action("Index")" class="btn btn-primary">
+            <i class="glyphicon glyphicon-arrow-left"></i>
+            Voltar
+        </a>
+    </div>
+</div>
+<hr />
+
+<div class="row">
+    <div class="col-lg-6 panel">
+        <h3>Informações do Cliente</h3>
+        <p>Nome: @Model.Visitante.Nome</p>
+        <p>Email: @Model.Visitante.Email</p>
+        <p>Celular: @Model.Visitante.Celular</p>
+    </div>
+    <div class="col-lg-6">
+        <h3 class="text-capitalize text-primary">Histórico da conversa</h3>
+        <div style="max-height: 300px; overflow-y: scroll">
+            <ul style="padding: 5px 0;">
+
+                @foreach (var msgs in @Model.Mensagens)
+                {
+                    if (msgs.Mensagem != null)
+                    {
+                        <li style="margin: 10px 0;"><strong>@(msgs.enviadoPorConsultor != null ? Model.Consultor.Nome : Model.Visitante.Nome):</strong> @msgs.Mensagem</li>
+                    }
+                    else
+                    {
+
+                        <li style="margin: 10px 0;"><strong>@(msgs.enviadoPorConsultor != null ? Model.Consultor.Nome : Model.Visitante.Nome):</strong> <a href="@Url.Action("Download", "Home", new { area = "", folder = folder, filename = msgs.Arquivo })"><i class="glyphicon glyphicon-download-alt"></i> Baixar arquivo</a></li>
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+</div>

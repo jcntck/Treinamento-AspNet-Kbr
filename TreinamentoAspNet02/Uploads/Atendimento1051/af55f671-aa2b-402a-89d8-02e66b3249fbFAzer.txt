@@ -1,0 +1,7 @@
+Metas para hoje:
+
+- Não permitir mais de dois clients do consultor no mesmo chat (Terminar)
+
+- Implementar função do tempo máximo do atendimento
+
+- Se caso o consultor desconectar, voltar com as mensagens onde parou
