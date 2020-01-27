@@ -15,6 +15,7 @@ namespace TreinamentoAspNet02.Areas.Admin.Models
         public string Descricao { get; set; }
         public string FotoPerfil { get; set; }
         public string Role { get; set; }
+        public bool Active { get; set; }
     }
 
     public class RegisterViewModel
@@ -44,6 +45,7 @@ namespace TreinamentoAspNet02.Areas.Admin.Models
         [Display(Name = "Descrição")]
         public string Descricao { get; set; }
 
+        [RegularExpression(".jpg$|.png$|.gif$|.jpeg", ErrorMessage = "Formato inválido. Formatos válidos: PNG, JPG, JPEG, GIF")]
         [DataType(DataType.Upload)]
         [Display(Name = "Foto de Perfil")]
         public HttpPostedFileBase FotoPerfil { get; set; }

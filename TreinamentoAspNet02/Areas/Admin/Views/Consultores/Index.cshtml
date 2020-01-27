@@ -23,9 +23,10 @@
                     <td>Imagem</td>
                     <td>Nome</td>
                     <td>E-mail</td>
+                    <td>Status</td>
                     <td><i class="glyphicon glyphicon-search" title="Mais detalhes"></i></td>
                     <td><i class="glyphicon glyphicon-pencil" title="Editar"></i></td>
-                    <td><i class="glyphicon glyphicon-trash" title="Remover"></i></td>
+                    <td><i class="glyphicon glyphicon-off" title="Alterar status da conta"></i></td>
                 </tr>
             </thead>
             @foreach (var consultor in Model)
@@ -45,6 +46,7 @@
                     </td>
                     <td>@consultor.Nome</td>
                     <td>@consultor.Email</td>
+                    <td>@consultor.Active</td>
                     <td style="width: 60px;">
                         <a href="@Url.Action("Details","Consultores", new { id = consultor.Id })" title="Mais detalhes">
                             <i class="glyphicon glyphicon-search"></i>
@@ -56,8 +58,8 @@
                         </a>
                     </td>
                     <td style="width: 60px;">
-                        <a href="@Url.Action("DeleteUser","Consultores", new { id = consultor.Id })" title="Excluir">
-                            <i class="glyphicon glyphicon-trash"></i>
+                        <a href="@Url.Action("ToggleStatus","Consultores", new { id = consultor.Id })" class="text-danger" title="Desativar ou ativar consultor">
+                            <i class="glyphicon glyphicon-off"></i>
                         </a>
                     </td>
                 </tr>

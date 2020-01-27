@@ -21,9 +21,7 @@ namespace TreinamentoAspNet02.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        //private sistema_atendimentoEntities db = new sistema_atendimentoEntities();
         private sistema_atendimentoEntities1 db = new sistema_atendimentoEntities1();
-
 
         public AccountController()
         {
@@ -73,7 +71,7 @@ namespace TreinamentoAspNet02.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        public ActionResult Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
@@ -82,19 +80,15 @@ namespace TreinamentoAspNet02.Controllers
 
             // Isso não conta falhas de login em relação ao bloqueio de conta
             // Para permitir que falhas de senha acionem o bloqueio da conta, altere para shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-            var user = await UserManager.FindAsync(model.Email, model.Password);
+            var result = SignInManager.PasswordSignIn(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var user = UserManager.Find(model.Email, model.Password);
+
+            result = IsActive(user.Active);
+
             switch (result)
             {
-
                 case SignInStatus.Success:
-                    if (UserManager.IsInRole(user.Id, "Admin"))
-                        return RedirectToLocal("/Admin");
-
-                    if (UserManager.IsInRole(user.Id, "Consultor"))
-                        return RedirectToLocal("/Consultor");
-
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToLocal(returnUrl, user);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -139,7 +133,7 @@ namespace TreinamentoAspNet02.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(model.ReturnUrl);
+                    return RedirectToLocal(model.ReturnUrl, null);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.Failure:
@@ -360,7 +354,7 @@ namespace TreinamentoAspNet02.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToLocal(returnUrl, null);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -402,7 +396,7 @@ namespace TreinamentoAspNet02.Controllers
                     if (result.Succeeded)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToLocal(returnUrl);
+                        return RedirectToLocal(returnUrl, null);
                     }
                 }
                 AddErrors(result);
@@ -479,13 +473,26 @@ namespace TreinamentoAspNet02.Controllers
             }
         }
 
-        private ActionResult RedirectToLocal(string returnUrl)
+        private ActionResult RedirectToLocal(string returnUrl, ApplicationUser user)
         {
             if (Url.IsLocalUrl(returnUrl))
             {
                 return Redirect(returnUrl);
             }
+
+            if (UserManager.IsInRole(user.Id, "Admin"))
+                return Redirect("/Admin");
+
+            if (UserManager.IsInRole(user.Id, "Consultor"))
+                return Redirect("/Consultor");
+
             return RedirectToAction("Index", "Home");
+        }
+
+        private SignInStatus IsActive(bool isActive)
+        {
+            if (!isActive) return SignInStatus.Failure;
+            else return SignInStatus.Success;
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

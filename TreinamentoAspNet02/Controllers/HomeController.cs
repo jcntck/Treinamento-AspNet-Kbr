@@ -37,13 +37,13 @@ namespace TreinamentoAspNet02.Controllers
 
             if (atendimentoAtual != null && !atendimentoAtual.Encerrado && !consultor.Ocupado)
             {
-                var model = new AtendimentoViewModel
-                {
-                    AtendimentoAtual = atendimentoAtual,
-                    Consultor = consultor,
-                    Visitante = db.Visitante.Find(atendimentoAtual.Id_Visitante)
-                };
-                return View(model);
+                //var model = new AtendimentoViewModel
+                //{
+                //    AtendimentoAtual = atendimentoAtual,
+                //    Consultor = consultor,
+                //    Visitante = db.Visitante.Find(atendimentoAtual.Id_Visitante)
+                //};
+                //return View(model);
             }
             return RedirectToAction("Index");
         }
@@ -78,27 +78,27 @@ namespace TreinamentoAspNet02.Controllers
 
             var atendimento = db.Atendimentos.Find(idAtendimento);
 
-            if (who.Equals("consultor"))
-            {
-                db.Mensagens.Add(new Mensagens
-                {
-                    Arquivo = nameFile,
-                    enviadoPorConsultor = atendimento.Id_Consultor,
-                    enviadoPorVisitante = 0,
-                    Id_Atendimento = idAtendimento
-                });
-            } else
-            {
-                db.Mensagens.Add(new Mensagens
-                {
-                    Arquivo = nameFile,
-                    enviadoPorConsultor = null,
-                    enviadoPorVisitante = atendimento.Id_Visitante,
-                    Id_Atendimento = idAtendimento
-                });
-            }
+            //if (who.Equals("consultor"))
+            //{
+            //    db.Mensagens.Add(new Mensagens
+            //    {
+            //        Arquivo = nameFile,
+            //        enviadoPorConsultor = atendimento.Id_Consultor,
+            //        enviadoPorVisitante = 0,
+            //        Id_Atendimento = idAtendimento
+            //    });
+            //} else
+            //{
+            //    db.Mensagens.Add(new Mensagens
+            //    {
+            //        Arquivo = nameFile,
+            //        enviadoPorConsultor = null,
+            //        enviadoPorVisitante = atendimento.Id_Visitante,
+            //        Id_Atendimento = idAtendimento
+            //    });
+            //}
 
-            db.SaveChanges();
+            //db.SaveChanges();
 
             return Json(nameFile);
         }

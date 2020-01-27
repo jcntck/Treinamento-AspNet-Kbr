@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net.Mail;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNet.Identity;
@@ -90,6 +91,15 @@ namespace TreinamentoAspNet02
                     new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
             }
             return manager;
+        }
+    }
+
+    public static class IdentityExtensions
+    {
+        public static string GetName(this IIdentity identity)
+        {
+            var claim = ((ClaimsIdentity)identity).FindFirst("Nome");
+            return (claim != null) ? claim.Value : string.Empty;
         }
     }
 

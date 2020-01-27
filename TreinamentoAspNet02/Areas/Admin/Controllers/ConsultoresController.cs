@@ -59,6 +59,7 @@ namespace TreinamentoAspNet02.Areas.Admin.Controllers
                              Descricao = user.Descricao,
                              FotoPerfil = user.FotoPerfil,
                              AutoId = user.AutoId,
+                             Active = user.Active,
                              RoleNames = (from userRole in user.Roles
                                           join role in Context.Roles on userRole.RoleId
                                           equals role.Id
@@ -69,7 +70,8 @@ namespace TreinamentoAspNet02.Areas.Admin.Controllers
                              Nome = p.Nome,
                              Email = p.Email,
                              Descricao = p.Descricao,
-                             FotoPerfil = p.FotoPerfil
+                             FotoPerfil = p.FotoPerfil,
+                             Active = p.Active
                          });
 
             return View(users);
@@ -100,7 +102,8 @@ namespace TreinamentoAspNet02.Areas.Admin.Controllers
                     Email = model.Email,
                     Nome = model.Nome,
                     Descricao = model.Descricao,
-                    FotoPerfil = foto
+                    FotoPerfil = foto,
+                    Active = true
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -205,25 +208,40 @@ namespace TreinamentoAspNet02.Areas.Admin.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        public ActionResult DeleteUser(string id)
+        public ActionResult ToggleStatus(string id)
         {
             var user = UserManager.FindById(id);
-
-            try
+            if (user.Active)
             {
-                UserManager.SendEmail(user.Id, "Conta excluida", "Sua conta no Helpchat foi deletada.\nData/hora:" + String.Format("{0: dd/MM/yyyy - HH:mm:ss}", DateTime.Now));
-            }
-            catch (Exception e)
+                FileHelper.Delete(user.FotoPerfil);
+                user.Active = false;
+                try
+                {
+                    UserManager.SendEmail(user.Id, "Conta desativada", "Sua conta no Helpchat foi desativada.\nData/hora:" + String.Format("{0: dd/MM/yyyy - HH:mm:ss}", DateTime.Now));
+                }
+                catch (Exception e)
+                {
+                    throw;
+                }
+            } else
             {
-                throw;
+                user.Active = true;
+                try
+                {
+                    UserManager.SendEmail(user.Id, "Conta re-ativada", "Sua conta no Helpchat foi re-ativada.\nData/hora:" + String.Format("{0: dd/MM/yyyy - HH:mm:ss}", DateTime.Now));
+                }
+                catch (Exception e)
+                {
+                    throw;
+                }
             }
 
-            FileHelper.Delete(user.FotoPerfil);
-            var result = UserManager.Delete(user);
+            var result = UserManager.Update(user);
+            
 
             if (result.Succeeded)
             {
-                TempData["success"] = "Consultor apagado com sucesso.";
+                TempData["success"] = "Status da conta alterada com sucesso.";
                 return RedirectToAction("Index");
             }
             AddErrors(result);

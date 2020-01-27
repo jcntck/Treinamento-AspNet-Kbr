@@ -5,13 +5,12 @@ using System.Web;
 
 namespace TreinamentoAspNet02.Models
 {
-    public class Visitante
+    public class Visitantes
     {
+        public int Id { get; set; }
         public string Nome { get; set; }
         public string Email { get; set; }
         public string Celular { get; set; }
-        public string Id_Consultor { get; set; }
-        public int TempoAtendimento { get; set; }
     }
 
     public class TempoAtendimento

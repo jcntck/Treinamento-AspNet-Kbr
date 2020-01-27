@@ -364,10 +364,6 @@ C:\Users\João\Desktop\KBRTec\treinamento_aspNet02\TreinamentoAspNet02\bin\pt-br
 C:\Users\João\Desktop\KBRTec\treinamento_aspNet02\TreinamentoAspNet02\obj\Debug\TreinamentoAspNet02.Migrations.Consultor10.resources
 C:\Users\João\Desktop\KBRTec\treinamento_aspNet02\TreinamentoAspNet02\obj\Debug\TreinamentoAspNet02.Migrations.Status.resources
 C:\Users\KBRTEC - 03\Desktop\Treinamento-AspNet-Kbr\TreinamentoAspNet02\obj\Debug\TreinamentoAspNet02.csprojAssemblyReference.cache
-C:\Users\KBRTEC - 03\Desktop\Treinamento-AspNet-Kbr\TreinamentoAspNet02\obj\Debug\TreinamentoAspNet02.Migrations.Consultor.resources
-C:\Users\KBRTEC - 03\Desktop\Treinamento-AspNet-Kbr\TreinamentoAspNet02\obj\Debug\TreinamentoAspNet02.Migrations.Consultor10.resources
-C:\Users\KBRTEC - 03\Desktop\Treinamento-AspNet-Kbr\TreinamentoAspNet02\obj\Debug\TreinamentoAspNet02.Migrations.Status.resources
-C:\Users\KBRTEC - 03\Desktop\Treinamento-AspNet-Kbr\TreinamentoAspNet02\obj\Debug\TreinamentoAspNet02.csproj.GenerateResource.cache
 C:\Users\KBRTEC - 03\Desktop\Treinamento-AspNet-Kbr\TreinamentoAspNet02\obj\Debug\TreinamentoAspNet02.dll
 C:\Users\KBRTEC - 03\Desktop\Treinamento-AspNet-Kbr\TreinamentoAspNet02\obj\Debug\TreinamentoAspNet02.pdb
 C:\Users\KBRTEC - 03\Desktop\Treinamento-AspNet-Kbr\TreinamentoAspNet02\bin\TreinamentoAspNet02.dll.config
@@ -487,3 +483,5 @@ C:\Users\KBRTEC - 03\Desktop\Treinamento-AspNet-Kbr\TreinamentoAspNet02\bin\pt-b
 C:\Users\KBRTEC - 03\Desktop\Treinamento-AspNet-Kbr\TreinamentoAspNet02\bin\pt-br\Microsoft.AspNet.Identity.Owin.resources.dll
 C:\Users\KBRTEC - 03\Desktop\Treinamento-AspNet-Kbr\TreinamentoAspNet02\bin\pt-br\Microsoft.AspNet.Identity.EntityFramework.resources.dll
 C:\Users\KBRTEC - 03\Desktop\Treinamento-AspNet-Kbr\TreinamentoAspNet02\obj\Debug\TreinamentoAspNet02.csproj.CopyComplete
+C:\Users\KBRTEC - 03\Desktop\Treinamento-AspNet-Kbr\TreinamentoAspNet02\obj\Debug\TreinamentoAspNet02.Migrations.Schema.resources
+C:\Users\KBRTEC - 03\Desktop\Treinamento-AspNet-Kbr\TreinamentoAspNet02\obj\Debug\TreinamentoAspNet02.csproj.GenerateResource.cache

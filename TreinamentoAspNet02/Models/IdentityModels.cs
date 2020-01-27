@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 namespace TreinamentoAspNet02.Models
 {
@@ -17,6 +18,8 @@ namespace TreinamentoAspNet02.Models
         public string Descricao { get; set; }
         public string FotoPerfil { get; set; }
         public bool Ocupado { get; set; }
+        public bool Active { get; set; }
+        public virtual ICollection<Atendimentos> Atendimentos { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Observe que o authenticationType deve corresponder àquele definido em CookieAuthenticationOptions.AuthenticationType

@@ -1,5 +1,4 @@
 ﻿@using Microsoft.AspNet.Identity
-@using TreinamentoAspNet02.App_Start
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", new { area = "" }, FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
